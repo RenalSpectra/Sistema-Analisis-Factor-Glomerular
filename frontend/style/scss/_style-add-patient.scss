@@ -1,0 +1,19 @@
+#add-patient {
+    width: 100dvw;
+    height: 100dvh;
+    padding: 0 10%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(210, 242, 255);
+    & > div > form {
+        & > div {
+            input {
+                background-color: var(--background-primary-color) !important;
+            }
+        }
+        .buttonsContainer {
+            margin-top: 20px;
+        }
+    }
+}
