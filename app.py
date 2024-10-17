@@ -35,24 +35,48 @@ def signup():
         return jsonify({'error': str(e)}), 400
 
 # Ruta para iniciar sesión (login)
-@app.route('/login', methods=['POST'])
+# @app.route('/login', methods=['POST'])
+# def login():
+#     data = request.json
+#     email = data['email']
+#     password = data['password']
+
+#     if not email or not password:
+#         return jsonify({'error': 'Email and password are required'}), 400
+
+#     try:
+#         # Iniciar sesión con el usuario en Supabase
+#         response = supabase.auth.sign_in_with_password({'email': email, 'password': password})
+#         user = response['user']
+#         access_token = create_access_token(identity=user['id'])
+
+#         return jsonify({'message': 'Logged in successfully', 'access_token': access_token}), 200
+#     except Exception as e:
+#         return jsonify({'error': str(e)}), 400
+
+@app.route('/login', methods=['GET', 'POST'])
 def login():
-    data = request.json
-    email = data['email']
-    password = data['password']
+    if request.method == 'GET':
+        return render_template('login.html')
+    
+    if request.method == 'POST':
+        data = request.json
+        email = data.get('email')
+        password = data.get('password')
 
-    if not email or not password:
-        return jsonify({'error': 'Email and password are required'}), 400
+        if not email or not password:
+            return jsonify({'error': 'Email and password are required'}), 400
 
-    try:
-        # Iniciar sesión con el usuario en Supabase
-        response = supabase.auth.sign_in_with_password({'email': email, 'password': password})
-        user = response['user']
-        access_token = create_access_token(identity=user['id'])
+        try:
+            # Iniciar sesión con el usuario en Supabase (o el sistema que uses)
+            response = supabase.auth.sign_in_with_password({'email': email, 'password': password})
+            user = response['user']
+            access_token = create_access_token(identity=user['id'])
 
-        return jsonify({'message': 'Logged in successfully', 'access_token': access_token}), 200
-    except Exception as e:
-        return jsonify({'error': str(e)}), 400
+            return jsonify({'message': 'Logged in successfully', 'access_token': access_token}), 200
+        except Exception as e:
+            return jsonify({'error': str(e)}), 400
+
 
 # Ruta para cerrar sesión (logout)
 @app.route('/logout', methods=['POST'])
