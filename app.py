@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 from flask_jwt_extended import (
     JWTManager, create_access_token, jwt_required, get_jwt_identity
 )
@@ -10,6 +10,10 @@ app.config['JWT_SECRET_KEY'] = SECRET_KEY
 jwt = JWTManager(app)
 
 # Ruta para registrar usuarios (solo admins)
+@app.route('/')
+def init():
+    return render_template('index.html')
+
 @app.route('/signup', methods=['POST'])
 @jwt_required()
 def signup():
