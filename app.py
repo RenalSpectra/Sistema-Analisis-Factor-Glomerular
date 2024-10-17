@@ -1,13 +1,15 @@
 from flask import Flask, request, jsonify, render_template
+from flask_cors import CORS
 from flask_jwt_extended import (
     JWTManager, create_access_token, jwt_required, get_jwt_identity
 )
-from config import supabase, SECRET_KEY, ADMIN
+from config import supabase, SECRET_KEY, ADMIN, allowed_origins
 from services import create_user, get_patient, create_patient, update_patient, delete_patient, create_measure, get_metrics, create_metric, update_metric, delete_metric
 
 app = Flask(__name__)
 app.config['JWT_SECRET_KEY'] = SECRET_KEY
 jwt = JWTManager(app)
+CORS(app, supports_credentials=True, origins=allowed_origins)
 
 # Ruta para registrar usuarios (solo admins)
 @app.route('/')
@@ -34,26 +36,6 @@ def signup():
     except Exception as e:
         return jsonify({'error': str(e)}), 400
 
-# Ruta para iniciar sesión (login)
-# @app.route('/login', methods=['POST'])
-# def login():
-#     data = request.json
-#     email = data['email']
-#     password = data['password']
-
-#     if not email or not password:
-#         return jsonify({'error': 'Email and password are required'}), 400
-
-#     try:
-#         # Iniciar sesión con el usuario en Supabase
-#         response = supabase.auth.sign_in_with_password({'email': email, 'password': password})
-#         user = response['user']
-#         access_token = create_access_token(identity=user['id'])
-
-#         return jsonify({'message': 'Logged in successfully', 'access_token': access_token}), 200
-#     except Exception as e:
-#         return jsonify({'error': str(e)}), 400
-
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'GET':
@@ -61,8 +43,8 @@ def login():
     
     if request.method == 'POST':
         data = request.json
-        email = data.get('email')
-        password = data.get('password')
+        email = data['email']
+        password = data['password']
 
         if not email or not password:
             return jsonify({'error': 'Email and password are required'}), 400
@@ -70,13 +52,12 @@ def login():
         try:
             # Iniciar sesión con el usuario en Supabase (o el sistema que uses)
             response = supabase.auth.sign_in_with_password({'email': email, 'password': password})
-            user = response['user']
-            access_token = create_access_token(identity=user['id'])
+            user = response.user
+            access_token = create_access_token(identity=user.id)
 
             return jsonify({'message': 'Logged in successfully', 'access_token': access_token}), 200
         except Exception as e:
             return jsonify({'error': str(e)}), 400
-
 
 # Ruta para cerrar sesión (logout)
 @app.route('/logout', methods=['POST'])
@@ -84,6 +65,7 @@ def login():
 def logout():
     try:
         # No se necesita una operación explícita en Supabase, simplemente invalidamos el token JWT en el frontend
+        supabase.auth.sign_out()
         return jsonify({'message': 'Logged out successfully'}), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 400
@@ -147,6 +129,3 @@ def handle_metrics(ci):
         return jsonify(update_metric(ci, data)), 200
     elif request.method == 'DELETE':
         return jsonify(delete_metric(ci)), 200
-
-if __name__ == '__main__':
-    app.run(debug=True)
