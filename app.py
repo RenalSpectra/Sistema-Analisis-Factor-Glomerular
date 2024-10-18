@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, jsonify, render_template, make_response
 from flask_cors import CORS
 from flask_jwt_extended import (
     JWTManager, create_access_token, jwt_required, get_jwt_identity
@@ -40,24 +40,29 @@ def signup():
 def login():
     if request.method == 'GET':
         return render_template('login.html')
-    
     if request.method == 'POST':
         data = request.json
         email = data['email']
         password = data['password']
-
         if not email or not password:
             return jsonify({'error': 'Email and password are required'}), 400
-
         try:
             # Iniciar sesión con el usuario en Supabase (o el sistema que uses)
             response = supabase.auth.sign_in_with_password({'email': email, 'password': password})
             user = response.user
             access_token = create_access_token(identity=user.id)
-
-            return jsonify({'message': 'Logged in successfully', 'access_token': access_token}), 200
+            # Crear la respuesta y agregar la cookie
+            resp = make_response(jsonify({'message': 'Logged in successfully'}))
+            # Configurar la cookie con el token, asegúrate de ajustar los parámetros de seguridad según tu entorno
+            resp.set_cookie('access_token', access_token, httponly=True, secure=True, samesite='Lax')
+            return resp, 200
         except Exception as e:
             return jsonify({'error': str(e)}), 400
+
+@app.route('/home_admin', methods=['GET'])
+@jwt_required()
+def home_admin():
+    return render_template('home-admin.html')
 
 # Ruta para cerrar sesión (logout)
 @app.route('/logout', methods=['POST'])
