@@ -57,7 +57,7 @@ def home_admin():
     if supabase.auth.get_session():
         return render_template('home-admin.html')
     else:
-        return jsonify('Debe iniciar sesión'), 400
+        return jsonify({'message': 'Debe iniciar sesion'}), 400
 
 # Ruta para cerrar sesión (logout)
 @app.route('/logout', methods=['POST'])
