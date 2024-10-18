@@ -54,7 +54,10 @@ def login():
 
 @app.route('/home_admin', methods=['GET'])
 def home_admin():
-    return render_template('home-admin.html')
+    if supabase.auth.get_session():
+        return render_template('home-admin.html')
+    else:
+        return jsonify('Debe iniciar sesión'), 400
 
 # Ruta para cerrar sesión (logout)
 @app.route('/logout', methods=['POST'])
