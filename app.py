@@ -11,6 +11,15 @@ app.config['JWT_SECRET_KEY'] = SECRET_KEY
 jwt = JWTManager(app)
 CORS(app, supports_credentials=True, origins=allowed_origins)
 
+# Configurar JWTManager
+app.config['JWT_TOKEN_LOCATION'] = ['cookies']
+app.config['JWT_ACCESS_COOKIE_NAME'] = 'access_token'  # Nombre de la cookie
+app.config['JWT_COOKIE_SECURE'] = False  # Cambia a True si usas HTTPS en producción
+app.config['JWT_COOKIE_SAMESITE'] = 'Lax'
+app.config['JWT_COOKIE_CSRF_PROTECT'] = False  # Cambia a True si quieres habilitar CSRF
+
+jwt = JWTManager(app)
+
 # Ruta para registrar usuarios (solo admins)
 @app.route('/')
 def init():
@@ -60,9 +69,13 @@ def login():
             return jsonify({'error': str(e)}), 400
 
 @app.route('/home_admin', methods=['GET'])
-@jwt_required()
+@jwt_required(locations=['cookies'])  # Asegúrate de que esto esté configurado
 def home_admin():
+    current_user = get_jwt_identity()
     return render_template('home-admin.html')
+
+
+
 
 # Ruta para cerrar sesión (logout)
 @app.route('/logout', methods=['POST'])
