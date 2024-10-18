@@ -1,24 +1,11 @@
-from flask import Flask, request, jsonify, render_template, make_response
+from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
-from flask_jwt_extended import (
-    JWTManager, create_access_token, jwt_required, get_jwt_identity
-)
-from config import supabase, SECRET_KEY, ADMIN, allowed_origins
+from config import supabase, SECRET_KEY, allowed_origins
 from services import create_user, get_patient, create_patient, update_patient, delete_patient, create_measure, get_metrics, create_metric, update_metric, delete_metric
 
 app = Flask(__name__)
 app.config['JWT_SECRET_KEY'] = SECRET_KEY
-jwt = JWTManager(app)
 CORS(app, supports_credentials=True, origins=allowed_origins)
-
-# Configurar JWTManager
-app.config['JWT_TOKEN_LOCATION'] = ['cookies']
-app.config['JWT_ACCESS_COOKIE_NAME'] = 'access_token'  # Nombre de la cookie
-app.config['JWT_COOKIE_SECURE'] = False  # Cambia a True si usas HTTPS en producción
-app.config['JWT_COOKIE_SAMESITE'] = 'Lax'
-app.config['JWT_COOKIE_CSRF_PROTECT'] = False  # Cambia a True si quieres habilitar CSRF
-
-jwt = JWTManager(app)
 
 # Ruta para registrar usuarios (solo admins)
 @app.route('/')
@@ -26,11 +13,7 @@ def init():
     return render_template('index.html')
 
 @app.route('/signup', methods=['POST'])
-@jwt_required()
 def signup():
-    current_user = get_jwt_identity()
-    if current_user != ADMIN:
-        return jsonify({"error": "Unauthorized"}), 403
     data = request.json
     email = data['email']
     password = data['password']
@@ -59,27 +42,22 @@ def login():
             # Iniciar sesión con el usuario en Supabase (o el sistema que uses)
             response = supabase.auth.sign_in_with_password({'email': email, 'password': password})
             user = response.user
-            access_token = create_access_token(identity=user.id)
+            access_token = user.id
             # Crear la respuesta y agregar la cookie
-            resp = make_response(jsonify({'message': 'Logged in successfully'}))
-            # Configurar la cookie con el token, asegúrate de ajustar los parámetros de seguridad según tu entorno
-            resp.set_cookie('access_token', access_token, httponly=True, secure=True, samesite='Lax')
-            return resp, 200
+            return jsonify({
+            'message': 'Logged in successfully',
+            'access_token': access_token,
+            'redirect_url': '/home_admin'
+            }), 200
         except Exception as e:
             return jsonify({'error': str(e)}), 400
 
 @app.route('/home_admin', methods=['GET'])
-@jwt_required(locations=['cookies'])  # Asegúrate de que esto esté configurado
 def home_admin():
-    current_user = get_jwt_identity()
     return render_template('home-admin.html')
-
-
-
 
 # Ruta para cerrar sesión (logout)
 @app.route('/logout', methods=['POST'])
-@jwt_required()
 def logout():
     try:
         # No se necesita una operación explícita en Supabase, simplemente invalidamos el token JWT en el frontend
@@ -90,13 +68,7 @@ def logout():
 
 # Ruta para crear usuarios (solo para admins)
 @app.route('/create_user', methods=['POST'])
-@jwt_required()
 def register_user():
-    current_user = get_jwt_identity()
-    # Verificar si el usuario actual es admin
-    if current_user != ADMIN: 
-        return jsonify({"error": "Unauthorized"}), 403
-    
     data = request.json
     user = create_user(data['email'], data['password'])
     if user:
@@ -105,14 +77,12 @@ def register_user():
 
 # CRUD para PATIENT
 @app.route('/patients', methods=['POST'])
-@jwt_required()
 def add_patient():
     data = request.json
     result = create_patient(data)
     return jsonify(result), 201
 
 @app.route('/patients/<ci>', methods=['GET', 'PUT', 'DELETE'])
-@jwt_required()
 def handle_patient(ci):
     if request.method == 'GET':
         return jsonify(get_patient(ci)), 200
@@ -124,7 +94,6 @@ def handle_patient(ci):
 
 # CRUD para MEASURES
 @app.route('/measures', methods=['POST'])
-@jwt_required()
 def add_measure():
     data = request.json
     return jsonify(create_measure(data)), 201
@@ -137,7 +106,6 @@ def add_metric():
     return jsonify(create_metric(data)), 201
 
 @app.route('/metrics/<ci>', methods=['GET', 'PUT', 'DELETE'])
-@jwt_required()
 def handle_metrics(ci):
     if request.method == 'GET':
         date = request.args.get('date')
