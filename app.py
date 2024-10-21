@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
-from config import supabase, SECRET_KEY, allowed_origins
+from config import supabase, SECRET_KEY, allowed_origins, ADMIN
 from services import create_user, get_patient, create_patient, update_patient, delete_patient, create_measure, get_metrics, create_metric, update_metric, delete_metric
 
 app = Flask(__name__)
@@ -40,9 +40,9 @@ def login():
             return jsonify({'error': 'Email and password are required'}), 400
         try:
             # Iniciar sesión con el usuario en Supabase (o el sistema que uses)
-            response = supabase.auth.sign_in_with_password({'email': email, 'password': password})
-            user = response.user
-            access_token = user.id
+            supabase.auth.sign_in_with_password({'email': email, 'password': password})
+            user = supabase.auth.get_session()
+            access_token = user.access_token
             # Crear la respuesta y agregar la cookie
             return jsonify({
             'message': 'Logged in successfully',
@@ -57,7 +57,7 @@ def home_admin():
     if supabase.auth.get_session():
         return render_template('home-admin.html')
     else:
-        return jsonify({'message': 'Debe iniciar sesion'}), 400
+        return render_template('403.html')
 
 # Ruta para cerrar sesión (logout)
 @app.route('/logout', methods=['POST'])
@@ -72,37 +72,41 @@ def logout():
 # Ruta para crear usuarios (solo para admins)
 @app.route('/create_user', methods=['POST'])
 def register_user():
-    data = request.json
-    user = create_user(data['email'], data['password'])
-    if user:
-        return jsonify({"message": "User created successfully"}), 201
-    return jsonify({"error": "User creation failed"}), 400
+    log_user = supabase.auth.get_session()
+    if log_user and log_user.user.email == ADMIN:
+        data = request.json
+        user = create_user(data['email'], data['password'])
+        if user:
+            return jsonify({"message": "User created successfully"}), 201
+        return jsonify({"error": "User creation failed"}), 400
+    else:
+        return render_template('403.html')
 
 # CRUD para PATIENT
 @app.route('/patients', methods=['POST'])
 def add_patient():
-    data = request.json
-    result = create_patient(data)
-    return jsonify(result), 201
+    if supabase.auth.get_session():
+        data = request.json
+        result = create_patient(data)
+        return jsonify(result[0]), result[1]
+    else:
+        return render_template('403.html')
 
 @app.route('/patients/<ci>', methods=['GET', 'PUT', 'DELETE'])
 def handle_patient(ci):
-    if request.method == 'GET':
-        return jsonify(get_patient(ci)), 200
-    elif request.method == 'PUT':
-        data = request.json
-        return jsonify(update_patient(ci, data)), 200
-    elif request.method == 'DELETE':
-        return jsonify(delete_patient(ci)), 200
-
-# CRUD para MEASURES
-@app.route('/measures', methods=['POST'])
-def add_measure():
-    data = request.json
-    return jsonify(create_measure(data)), 201
+    if supabase.auth.get_session():
+        if request.method == 'GET':
+            return jsonify(get_patient(ci)), 200
+        elif request.method == 'PUT':
+            data = request.json
+            return jsonify(update_patient(ci, data)), 200
+        elif request.method == 'DELETE':
+            return jsonify(delete_patient(ci)), 200
+    else:
+        return render_template('403.html')
 
 # CRUD para METRICS - solo los usuarios pueden hacer RUD
-@app.route('/metrics', methods=['POST'])
+@app.route('/api/metrics', methods=['POST'])
 def add_metric():
     data = request.json
     # No requiere autenticación porque es enviado por el controlador ESP32
@@ -113,8 +117,12 @@ def handle_metrics(ci):
     if request.method == 'GET':
         date = request.args.get('date')
         return jsonify(get_metrics(ci, date)), 200
-    elif request.method == 'PUT':
-        data = request.json
-        return jsonify(update_metric(ci, data)), 200
-    elif request.method == 'DELETE':
-        return jsonify(delete_metric(ci)), 200
+    else:
+        if supabase.auth.get_session():
+            if request.method == 'PUT':
+                data = request.json
+                return jsonify(update_metric(ci, data)), 200
+            elif request.method == 'DELETE':
+                return jsonify(delete_metric(ci)), 200
+        else:
+            return render_template('403.html')
