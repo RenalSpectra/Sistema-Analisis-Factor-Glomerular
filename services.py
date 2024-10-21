@@ -14,7 +14,7 @@ def create_patient(data):
         patient_response = supabase.table('patient').insert(data).execute()
         if not patient_response.data:
             return {'error': 'Failed to add patient'}, 400
-        return {'message': 'Patient and measure added successfully'}, 201
+        return {'patient': patient_response.data}, 201
     except Exception as e:
         return {'error': str(e)}, 400
 
