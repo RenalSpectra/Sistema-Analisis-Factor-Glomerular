@@ -128,8 +128,6 @@ def handle_patient(ci):
     if supabase.auth.get_session():
         if request.method == 'GET':
             return render_template('admin-info-patient.html')
-            # return jsonify(get_patient(ci)), 200
-            return render_template('admin-info-patient.html')
         elif request.method == 'PUT':
             data = request.json
             return jsonify(update_patient(ci, data)), 200
