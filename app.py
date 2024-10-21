@@ -109,20 +109,6 @@ def search_patient():
     else:
         return render_template('403.html')
 
-@app.route('/search_patients', methods=['GET', 'POST'])
-def search_patient():
-    if supabase.auth.get_session():
-        if request.method == 'GET':
-            return render_template('admin-search-patient.html')
-        if request.method == 'POST':
-            data = request.json
-            if data['patient'] == 'all':
-                return jsonify(get_all_patient()), 200
-            else:
-                return jsonify(get_patient(data['patient']), 200)
-    else:
-        return render_template('403.html')
-
 @app.route('/patients/<ci>', methods=['GET', 'PUT', 'DELETE'])
 def handle_patient(ci):
     if supabase.auth.get_session():

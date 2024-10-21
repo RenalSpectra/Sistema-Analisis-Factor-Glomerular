@@ -9,3 +9,6 @@ def calculate_ifg(creatine, age, gender, stature, weight):
         return (140 - int(age)) * float(weight) / (72 * creatine)
     else:
         return (140 - int(age)) * float(weight) / (85 * creatine)
+    
+def calculate_ifg_ckd_epi(creatine, age):
+    pass
