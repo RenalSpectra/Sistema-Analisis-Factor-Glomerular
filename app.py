@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
 from config import supabase, SECRET_KEY, allowed_origins, ADMIN
-from services import create_user, get_patient, create_patient, update_patient, delete_patient, create_measure, get_metrics, create_metric, update_metric, delete_metric
+from services import create_user, get_patient, create_patient, update_patient, delete_patient, get_all_patient, get_metrics, create_metric, update_metric, delete_metric
 
 app = Flask(__name__)
 app.config['JWT_SECRET_KEY'] = SECRET_KEY
@@ -92,11 +92,25 @@ def add_patient():
     else:
         return render_template('403.html')
 
+@app.route('/search_patients', methods=['GET', 'POST'])
+def search_patient():
+    if supabase.auth.get_session():
+        if request.method == 'GET':
+            return render_template('admin-search-patient.html')
+        if request.method == 'POST':
+            data = request.json
+            if data['patient'] == 'all':
+                return jsonify(get_all_patient()), 200
+            else:
+                return jsonify(get_patient(data['patient']), 200)
+    else:
+        return render_template('403.html')
+
 @app.route('/patients/<ci>', methods=['GET', 'PUT', 'DELETE'])
 def handle_patient(ci):
     if supabase.auth.get_session():
         if request.method == 'GET':
-            return jsonify(get_patient(ci)), 200
+            return render_template('admin-info-patient.html')
         elif request.method == 'PUT':
             data = request.json
             return jsonify(update_patient(ci, data)), 200
