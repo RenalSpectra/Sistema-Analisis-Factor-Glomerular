@@ -106,6 +106,22 @@
         </section>
     </main>
     <script>
+        document.addEventListener("DOMContentLoaded", () => {
+        const patientData = JSON.parse(localStorage.getItem('patientData'));
+
+        if (patientData) {
+            document.getElementById('floatingEmptyPlaintextInput').value = patientData.name;
+            document.getElementById('floating-inputLastName').value = patientData.lastname;
+            document.getElementById('floating-inputCI').value = patientData.ci;
+            document.getElementById('floating-inputDateBirth').value = patientData.birthdate;
+            document.getElementById('floating-inputHeight').value = patientData.height;
+            document.getElementById('floating-inputWeight').value = patientData.weight;
+            document.getElementById('floating-inputGender').value = patientData.gender;
+
+            // Elimina los datos del localStorage si ya no son necesarios
+            localStorage.removeItem('patientData');
+        }
+    });
 
     </script>
 </body>

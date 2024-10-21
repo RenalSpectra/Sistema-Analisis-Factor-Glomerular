@@ -47,13 +47,7 @@ async function AddPatient() {
         if (response.ok) {
             alert('¡Paciente creado con éxito!');
             // Copiando información
-            document.getElementById('floatingEmptyPlaintextInput').value = name;
-            document.getElementById('floating-inputLastName').value = lastname;
-            document.getElementById('floating-inputCI').value = ci;
-            document.getElementById('floating-inputDateBirth').value = birthdate;
-            document.getElementById('floating-inputHeight').value = height;
-            document.getElementById('floating-inputWeight').value = weight;
-            document.getElementById('floating-inputGender').value = gender;
+            localStorage.setItem('patientData', JSON.stringify({ name, lastname, ci, birthdate, height, weight, gender }));
             // Redirigir a la página del paciente recién creado
             window.location.href = `/patients/${ci}`;
         } else {
