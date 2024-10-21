@@ -83,14 +83,17 @@ def register_user():
         return render_template('403.html')
 
 # CRUD para PATIENT
-@app.route('/patients', methods=['POST'])
+@app.route('/patients', methods=['GET', 'POST'])
 def add_patient():
-    if supabase.auth.get_session():
-        data = request.json
-        result = create_patient(data)
-        return jsonify(result[0]), result[1]
-    else:
-        return render_template('403.html')
+    if request.method == 'GET':
+        return render_template ('add-patient.html')
+    if request.method == 'POST':
+        if supabase.auth.get_session():
+            data = request.json
+            result = create_patient(data)
+            return jsonify(result[0]), result[1]
+        else:
+            return render_template('403.html')
 
 @app.route('/patients/<ci>', methods=['GET', 'PUT', 'DELETE'])
 def handle_patient(ci):

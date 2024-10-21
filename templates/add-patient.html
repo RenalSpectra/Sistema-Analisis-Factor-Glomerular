@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../style/css/style.css">
+    <link rel="stylesheet" href="../static/css/style.css">
     <link rel="icon" href="../assets/icons/rinon.png">
     <title>Renal Spectra</title>
     <!-- Bootstrap -->
@@ -15,8 +15,8 @@
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
         <div class="container-fluid">
             <div class="navbar-brand">
-                <a href="./home-admin.html" class='logoHeader'>
-                    <img class='logo' alt="Renal Spectra Logo" src='../assets/icons/rinon.png' />
+                <a href="{{ url_for('home_admin') }}" class='logoHeader'>
+                    <img class='logo' alt="Renal Spectra Logo" src='../static/icons/rinon.png' />
                     <span>Renal Spectra</span>
                 </a>
             </div>
@@ -31,14 +31,14 @@
                             Pacientes
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="./add-patient.html">Añadir paciente</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('add_patient') }}">Añadir paciente</a></li>
                             <li><a class="dropdown-item" href="./admin-search-patients.html">Buscar paciente</a></li>
                         </ul>
                     </li>
                 </ul>
                 <a href="./index.html">
                     <div class="button red-btn">
-                        <img class="icon" src="../assets/icons/User.png" alt="">
+                        <img class="icon" src="../static/icons/User.png" alt="">
                         Cerrar Sesión
                     </div>
                 </a>
@@ -77,13 +77,13 @@
                     <div class="col-md-6">
                         <label for="inputHeight" class="form-label">Género:</label>
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioMasculino">
+                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioMasculino" value="M" checked>
                             <label class="form-check-label" for="flexRadioMasculino">
                                 Masculino
                             </label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioFemenino" checked>
+                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioFemenino" value="F">
                             <label class="form-check-label" for="flexRadioFemenino">
                                 Femenino
                             </label>
@@ -93,25 +93,24 @@
                         <button type="submit" class="btn btn-primary">Sign in</button>
                     </div> -->
                     <div class="buttonsContainer">
-                        <a href="./home-admin.html">
+                        <a href="{{ url_for('home_admin') }}">
                             <div class="button red-btn">
-                                <img class="icon" src="../assets/icons/ArrowLeft.png" alt="">
+                                <img class="icon" src="../static/icons/ArrowLeft.png" alt="">
                                 Cancelar
                             </div>
                         </a>
-                        <a href="../pages/admin-info-patient.html">
-                            <div class="button">
-                                <img class="icon" src="../assets/icons/Plus.png" alt="">
+                        
+                            <div class="button" onclick="AddPatient()">
+                                <img id='add-patient-button' class="icon" src="../static/icons/Plus.png" alt="">
                                 Añadir paciente
                             </div>
-                        </a>
                     </div>
                 </form>
             </div>
         </section>
     </main>
     <script>
-
+        
     </script>
 </body>
 </html>
