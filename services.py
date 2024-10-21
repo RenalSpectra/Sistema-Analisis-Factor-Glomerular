@@ -7,83 +7,56 @@ def create_user(email, password):
 
 # CRUD para PATIENT
 def create_patient(data):
-    ci = data['ci']
-    name = data['name']
-    lastname = data['lastname']
-    birthdate = data['birthdate']
-    age = data['age']
-    gender = data['gender']
-    stature = data['stature']
-    weight = data['weight']
     try:
-        existing_patient = supabase.table('PATIENT').select('*').eq('CI', ci).execute()
+        existing_patient = supabase.table('patient').select('*').eq('ci', data['ci']).execute()
         if existing_patient.data:
             return {'error': 'Patient with this CI already exists'}, 400
-        new_patient = {
-                'ci': ci,
-                'name': name,
-                'lastname': lastname,
-                'birthdate': birthdate,
-                'age': age,
-                'gender': gender
-            }
-        patient_response = supabase.table('PATIENT').insert(new_patient).execute()
+        patient_response = supabase.table('patient').insert(data).execute()
         if not patient_response.data:
             return {'error': 'Failed to add patient'}, 400
-        
-        new_measure = {
-                'stature': stature,
-                'weight': weight,
-                'patient_ci': ci
-            }
-        measure_response = supabase.table('MEASURES').insert(new_measure).execute()
-        if not measure_response.data:
-            return {'error': 'Failed to add measure'}, 400
-        return {'message': 'Patient and measure added successfully'}, 201
+        return {'patient': patient_response.data}, 201
     except Exception as e:
         return {'error': str(e)}, 400
 
+def get_all_patient():
+    return supabase.table('patient').select('ci, name, lastname').execute()
+
 def get_patient(ci):
-    return supabase.table('PATIENT').select('*').eq('CI', ci).execute()
+    return supabase.table('patient').select('*').eq('ci', ci).execute()
 
 def update_patient(ci, data):
-    return supabase.table('PATIENT').update(data).eq('CI', ci).execute()
+    return supabase.table('patient').update(data).eq('ci', ci).execute()
 
 def delete_patient(ci):
-    return supabase.table('PATIENT').delete().eq('CI', ci).execute()
-
-# CRUD para MEASURES
-def create_measure(data):
-    return supabase.table('MEASURES').insert(data).execute()
+    return supabase.table('patient').delete().eq('ci', ci).execute()
 
 # CRUD para METRICS
 def create_metric(data):
-    patient = supabase.table('PATIENT').select('*').eq('CI', data['CI']).execute()
+    patient = supabase.table('patient').select('*').eq('ci', data['ci']).execute()
     if not patient.data:
         return {"error": "Patient not found"}, 404
-
-    age = patient.data[0]['AGE']
-    gender = patient.data[0]['GENDER']
-    stature = data['STATURE']
-    weight = data['WEIGHT']
-
-    ifg = calculate_ifg(data['CREATINE'], age, gender, stature, weight)
+    age = patient.data[0]['age']
+    gender = patient.data[0]['gender']
+    height = patient.data[0]['height']
+    weight = patient.data[0]['weight']
+    ifg = calculate_ifg(data['creatine'], age, gender, height, weight)
     metric = {
-        'CREATINE': data['CREATINE'],
-        'IFG': ifg,
-        'CI': data['CI'],
-        'DATE': supabase.functions.now()
+        'creatine': data['creatine'],
+        'ifg': ifg,
+        'height': height,
+        'weight': weight,
+        'ci': data['ci']
     }
-    return supabase.table('METRICS').insert(metric).execute()
+    return supabase.table('metrics').insert(metric).execute()
 
 def get_metrics(ci, date=None):
-    query = supabase.table('METRICS').select('*').eq('CI', ci)
+    query = supabase.table('metrics').select('*').eq('ci', ci)
     if date:
-        query = query.eq('DATE', date)
+        query = query.eq('date', date)
     return query.execute()
 
 def update_metric(ci, data):
-    return supabase.table('METRICS').update(data).eq('CI', ci).execute()
+    return supabase.table('metrics').update(data).eq('ci', ci).execute()
 
 def delete_metric(ci):
-    return supabase.table('METRICS').delete().eq('CI', ci).execute()
+    return supabase.table('metrics').delete().eq('ci', ci).execute()
