@@ -50,13 +50,13 @@ def create_metric(data):
     return supabase.table('metrics').insert(metric).execute()
 
 def get_metrics(ci, date=None):
-    query = supabase.table('METRICS').select('*').eq('ci', ci)
+    query = supabase.table('metrics').select('*').eq('ci', ci)
     if date:
-        query = query.eq('DATE', date)
+        query = query.eq('date', date)
     return query.execute()
 
 def update_metric(ci, data):
-    return supabase.table('METRICS').update(data).eq('ci', ci).execute()
+    return supabase.table('metrics').update(data).eq('ci', ci).execute()
 
 def delete_metric(ci):
-    return supabase.table('METRICS').delete().eq('ci', ci).execute()
+    return supabase.table('metrics').delete().eq('ci', ci).execute()
