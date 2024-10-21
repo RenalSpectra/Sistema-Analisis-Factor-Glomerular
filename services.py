@@ -7,7 +7,41 @@ def create_user(email, password):
 
 # CRUD para PATIENT
 def create_patient(data):
-    return supabase.table('PATIENT').insert(data).execute()
+    ci = data['ci']
+    name = data['name']
+    lastname = data['lastname']
+    birthdate = data['birthdate']
+    age = data['age']
+    gender = data['gender']
+    stature = data['stature']
+    weight = data['weight']
+    try:
+        existing_patient = supabase.table('PATIENT').select('*').eq('CI', ci).execute()
+        if existing_patient.data:
+            return {'error': 'Patient with this CI already exists'}, 400
+        new_patient = {
+                'ci': ci,
+                'name': name,
+                'lastname': lastname,
+                'birthdate': birthdate,
+                'age': age,
+                'gender': gender
+            }
+        patient_response = supabase.table('PATIENT').insert(new_patient).execute()
+        if not patient_response.data:
+            return {'error': 'Failed to add patient'}, 400
+        
+        new_measure = {
+                'stature': stature,
+                'weight': weight,
+                'patient_ci': ci
+            }
+        measure_response = supabase.table('MEASURES').insert(new_measure).execute()
+        if not measure_response.data:
+            return {'error': 'Failed to add measure'}, 400
+        return {'message': 'Patient and measure added successfully'}, 201
+    except Exception as e:
+        return {'error': str(e)}, 400
 
 def get_patient(ci):
     return supabase.table('PATIENT').select('*').eq('CI', ci).execute()
