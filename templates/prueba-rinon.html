@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kidney Shape with Polygon</title>
+    <style>
+    .kidney {
+        width: 200px;
+        height: 400px;
+        background-color: #f9c6c6; /* Color rosado claro */
+        clip-path: polygon(50% 0%, 100% 25%, 85% 50%, 100% 75%, 55% 100%, 0% 50%);
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .barra {
+        width: 100%;
+        height: 40%;
+        background-color: aqua;
+        position: absolute;
+        bottom: 0;
+    }
+
+    h1 {
+        z-index: 1;
+    }
+
+    .egg {
+    --size: 200px;
+    --half-size: calc(var(--size) / 2);
+    --gradient: linear-gradient(#e3b882, #3f2a10);
+
+    width: var(--size);
+    height: calc(var(--size)* 1.35);
+    background: var(--gradient);
+    border-radius: 50% / 65% 65% var(--half-size) var(--half-size);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    }
+
+    .container {
+        position: relative;
+        width: fit-content;
+    }
+
+    .rinon {
+            width: 150px; /* Ajusta el tamaño según sea necesario */
+            height: 300px; /* Ajusta el tamaño según sea necesario */
+            background-color: #34db3c; /* Color de fondo */
+            border-radius: 150px 0px 0px 150px; /* Bordes superiores redondeados */
+            position: relative; /* Para posicionar el pseudo-elemento */
+            display:flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+    }
+
+    .rinon .top-element {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 130px; /* Ajusta el tamaño según sea necesario */
+            height: 130px; /* Ajusta el tamaño según sea necesario */
+            background-color: #34db3c; /* Color de fondo */
+            border-radius: 50%; /* Forma circular */
+            transform: translateX(50%); /* Centra el pseudo-elemento */
+    }
+
+    .rinon .bottom-element {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 130px; /* Ajusta el tamaño según sea necesario */
+            height: 130px; /* Ajusta el tamaño según sea necesario */
+            background-color: #34db3c; /* Color de fondo */
+            border-radius: 50%; /* Forma circular */
+            transform: translateX(50%); /* Centra el pseudo-elemento */
+    }
+
+    .rinon .center-element1 {
+            content: '';
+            position: absolute;
+            top: 50%;
+            right: 0;
+            width: 40px; /* Ajusta el tamaño según sea necesario */
+            height: 40px; /* Ajusta el tamaño según sea necesario */
+            background-color: #34db3c;
+            z-index: 2;
+            transform: translate(50%,-50%);
+    }
+    .rinon .center-element2 {
+            content: '';
+            position: absolute;
+            top: 50%;
+            right: 0;
+            width: 40px; /* Ajusta el tamaño según sea necesario */
+            height: 45px; /* Ajusta el tamaño según sea necesario */
+            background-color: #ffffff;
+            z-index: 3;
+            border-radius: 50% 0 0 50%;
+            transform: translate(100%,-50%);
+    }
+    </style>
+</head>
+<body>
+
+    <div class="kidney">
+        <div class="barra"></div>
+        <h1>50%</h1>
+    </div>
+    
+    <div class="egg">
+        <div class="barra"></div>
+        <h1>50%</h1>
+    </div>
+    
+    <div class="container">
+        <div class="barra"></div>
+        <div class="rinon">
+            <div class="top-element"></div>
+            <div class="bottom-element"></div>
+            <div class="center-element1"></div>
+            <div class="center-element2"></div>
+            <!-- <div class="barra"></div> -->
+            <h1>50%</h1>
+        </div>
+    </div>
+    
+</body>
+</html>

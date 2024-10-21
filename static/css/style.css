@@ -10,11 +10,11 @@
 
 @font-face {
   font-family: "Work Sans";
-  src: url("../../static/fonts/WorkSans-VariableFont_wght.ttf");
+  src: url("../../assets/fonts/WorkSans-VariableFont_wght.ttf");
 }
 @font-face {
   font-family: "Roboto";
-  src: url("../../static/fonts/Roboto-Regular.ttf");
+  src: url("../../assets/fonts/Roboto-Regular.ttf");
 }
 * {
   padding: 0;
@@ -468,15 +468,89 @@ form a {
 #patient-search-patients .search-container {
   display: flex;
   flex-direction: column;
+  width: 100%;
 }
 #patient-search-patients .search-container .searchInputButton {
+  width: 100%;
   display: flex;
 }
 #patient-search-patients .search-container .searchInputButton form {
-  width: 80%;
+  width: 100%;
 }
 #patient-search-patients .search-container .searchInputButton a {
   text-decoration: none;
+}
+#patient-search-patients .search-container .searchInputButton a .button {
+  padding-right: 32px;
+  padding-left: 24px;
+}
+#patient-search-patients .search-container .table {
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+}
+#patient-search-patients .search-container .table .tableHeader {
+  background-color: var(--background-secondary-color);
+  width: 100%;
+}
+#patient-search-patients .search-container .table .tableHeader > ul {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding-left: 0;
+  margin-bottom: 0;
+}
+#patient-search-patients .search-container .table .tableHeader > ul > li {
+  color: aliceblue;
+  list-style-type: none;
+  text-align: center;
+  width: 25%;
+  background-color: transparent;
+}
+#patient-search-patients .search-container .table .tableContent {
+  width: 100%;
+}
+#patient-search-patients .search-container .table .tableContent > ul {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding-left: 0;
+  border-bottom: 1px solid black;
+  margin-bottom: 0;
+}
+#patient-search-patients .search-container .table .tableContent > ul > li {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  list-style-type: none;
+  text-align: center;
+  width: 25%;
+  background-color: transparent;
+}
+#patient-search-patients .search-container .table .tableContent > ul > li > a {
+  text-decoration: none;
+}
+#patient-search-patients .search-container .table .tableContent > ul > li .button img {
+  height: 20px;
+}
+
+#patient-analytics {
+  width: 100dvw;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0px 10%;
+  background-image: url(../../assets/img/doctor3.png);
+}
+#patient-analytics .analytics-container {
+  margin-top: 10%;
+  display: flex;
+  flex-direction: column;
+}
+#patient-analytics .analytics-container > h1 {
+  color: white !important;
 }
 
 /*# sourceMappingURL=style.css.map */
