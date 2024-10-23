@@ -60,3 +60,6 @@ def update_metric(ci, data):
 
 def delete_metric(ci):
     return supabase.table('metrics').delete().eq('ci', ci).execute()
+
+def create_pdf(ci):
+    pass
