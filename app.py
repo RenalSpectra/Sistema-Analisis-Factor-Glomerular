@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
 from config import supabase, SECRET_KEY, allowed_origins, ADMIN
-from services import create_user, get_patient, create_patient, update_patient, delete_patient, get_all_patient, get_metrics, create_metric, update_metric, delete_metric
+from services import create_user, get_patient, create_patient, update_patient, delete_patient, get_all_patient, get_metrics, create_metric, create_pdf
 
 app = Flask(__name__)
 app.config['JWT_SECRET_KEY'] = SECRET_KEY
@@ -95,7 +95,7 @@ def add_patient():
         else:
             return render_template('403.html')
 
-@app.route('/search_patients', methods=['GET', 'POST'])
+@app.route('/admin_search', methods=['GET', 'POST'])
 def search_patient():
     if supabase.auth.get_session():
         if request.method == 'GET':
@@ -126,20 +126,30 @@ def handle_patient(ci):
 @app.route('/api/metrics', methods=['POST'])
 def add_metric():
     data = request.json
-    # No requiere autenticación porque es enviado por el controlador ESP32
     return jsonify(create_metric(data)), 201
 
-@app.route('/metrics/<ci>', methods=['GET', 'PUT', 'DELETE'])
+@app.route('/metrics/<ci>', methods=['GET', 'POST'])
 def handle_metrics(ci):
-    if request.method == 'GET':
-        date = request.args.get('date')
-        return jsonify(get_metrics(ci, date)), 200
+    if supabase.auth.get_session():
+        if request.method == 'GET':
+            return render_template('analytics.html')
+        if request.method == 'POST':
+            data = request.json
+            if data['type'] == 'actualizar':
+                return jsonify(get_metrics(ci)), 200
+            else:
+                return jsonify(create_pdf(ci)), 200
     else:
-        if supabase.auth.get_session():
-            if request.method == 'PUT':
-                data = request.json
-                return jsonify(update_metric(ci, data)), 200
-            elif request.method == 'DELETE':
-                return jsonify(delete_metric(ci)), 200
-        else:
-            return render_template('403.html')
+        return render_template('403.html')
+
+@app.route('/patient_search', methods=['GET', 'POST'])
+def search_patient_o():
+    if request.method == 'GET':
+        return render_template('patient-search-patients.html')
+    if request.method == 'POST':
+        return jsonify()
+
+@app.route('/patient_metrics', methods=['GET', 'POST'])
+def patient_handle_metrics():
+    if request.method == 'GET':
+        return render_template('patient-analytics.html')
