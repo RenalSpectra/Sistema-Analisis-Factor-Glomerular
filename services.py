@@ -19,10 +19,12 @@ def create_patient(data):
         return {'error': str(e)}, 400
 
 def get_all_patient():
-    return supabase.table('patient').select('ci, name, lastname').execute()
+    response = supabase.table('patient').select('ci, name, lastname').execute()
+    return response.data  # Devolver solo los datos
 
 def get_patient(ci):
-    return supabase.table('patient').select('*').eq('ci', ci).execute()
+    response = supabase.table('patient').select('*').eq('ci', ci).execute()
+    return response.data  # Devolver solo los datos
 
 def update_patient(ci, data):
     return supabase.table('patient').update(data).eq('ci', ci).execute()

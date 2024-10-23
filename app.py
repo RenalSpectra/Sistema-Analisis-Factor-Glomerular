@@ -99,15 +99,29 @@ def add_patient():
 def search_patient():
     if supabase.auth.get_session():
         if request.method == 'GET':
-            return render_template('admin-search-patient.html')
+            return render_template('admin-search-patients.html')
         if request.method == 'POST':
             data = request.json
+            print(f"Data received: {data}")  # Verifica los datos recibidos
+
+            if 'patient' not in data:
+                return jsonify({'error': 'No patient provided'}), 400
+
             if data['patient'] == 'all':
-                return jsonify(get_all_patient()), 200
+                all_patients = get_all_patient()  # Ahora devuelve directamente los datos
+                print(f"All patients data: {all_patients}")  # Verifica los datos extraídos
+                return jsonify(all_patients), 200  # Devuelve solo los datos
+
             else:
-                return jsonify(get_patient(data['patient']), 200)
+                patient = get_patient(data['patient'])  # Ahora devuelve directamente los datos
+                print(f"Patient data: {patient}")  # Verifica los datos extraídos
+                return jsonify(patient), 200  # Devuelve solo los datos
+
     else:
-        return render_template('403.html')
+        return render_template('403.html'), 403
+
+
+
 
 @app.route('/patients/<ci>', methods=['GET', 'PUT', 'DELETE'])
 def handle_patient(ci):

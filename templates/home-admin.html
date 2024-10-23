@@ -32,7 +32,7 @@
                         </a>
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" href="{{ url_for('add_patient') }}">Añadir paciente</a></li>
-                            <li><a class="dropdown-item" href="./admin-search-patients.html">Buscar paciente</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('search_patient') }}">Buscar paciente</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -57,7 +57,7 @@
                             Añadir paciente
                         </div>
                     </a>
-                    <a href="./admin-search-patients.html">
+                    <a href="{{ url_for('search_patient') }}">
                         <div class="button">
                             <img class="icon" src="../static/icons/MagnifyingGlass.png" alt="">
                             Buscar paciente
