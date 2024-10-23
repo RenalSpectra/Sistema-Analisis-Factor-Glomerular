@@ -47,7 +47,7 @@ async function AddPatient() {
         if (response.ok) {
             alert('¡Paciente creado con éxito!');
             // Copiando información
-            localStorage.setItem('patientData', JSON.stringify({ name, lastname, ci, birthdate, height, weight, gender }));
+            localStorage.setItem('patientData', JSON.stringify({ name, lastname, ci, birthdate, age, height, weight, gender }));
             // Redirigir a la página del paciente recién creado
             window.location.href = `/patients/${ci}`;
         } else {

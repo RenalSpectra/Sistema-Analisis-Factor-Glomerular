@@ -389,7 +389,7 @@ form a {
 
 #admin-info-patient {
   background-color: rgba(182, 233, 253, 0.5);
-  background-image: url(../../assets/img/doctor2.png);
+  background-image: url(../../static/img/doctor2.png);
   background-repeat: no-repeat;
   background-size: contain;
   width: 100dvw;
@@ -411,6 +411,11 @@ form a {
 }
 #admin-info-patient .infoPatientContainer > form {
   z-index: 2;
+  display: flex;
+  flex-wrap: wrap;
+}
+#admin-info-patient .infoPatientContainer > form > div {
+  flex-basis: calc(33.33% - 10px);
 }
 #admin-info-patient .infoPatientContainer > form > div label {
   font-weight: bold;

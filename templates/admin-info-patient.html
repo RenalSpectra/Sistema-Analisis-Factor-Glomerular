@@ -31,7 +31,7 @@
                             Pacientes
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="./add-patient.html">Añadir paciente</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('add_patient') }}">Añadir paciente</a></li>
                             <li><a class="dropdown-item" href="./admin-search-patients.html">Buscar paciente</a></li>
                         </ul>
                     </li>
@@ -65,6 +65,10 @@
                     <div class="col-md-6">
                         <label for="inputDateBirth" class="form-label">Fecha de Nacimiento:</label>
                         <input type="text" readonly class="form-control-plaintext" id="floating-inputDateBirth" placeholder="DD-MM-AAAA">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="inputEdad" class="form-label">Edad:</label>
+                        <input type="text" readonly class="form-control-plaintext" id="floating-inputAge" placeholder="Edad">
                     </div>
                     <div class="col-md-6">
                         <label for="inputWeight" class="form-label">Peso (kg):</label>
@@ -114,12 +118,13 @@
                 document.getElementById('floating-inputLastName').value = patientData.lastname;
                 document.getElementById('floating-inputCI').value = patientData.ci;
                 document.getElementById('floating-inputDateBirth').value = patientData.birthdate;
+                document.getElementById('floating-inputAge').value = patientData.age;
                 document.getElementById('floating-inputHeight').value = patientData.height;
                 document.getElementById('floating-inputWeight').value = patientData.weight;
                 document.getElementById('floating-inputGender').value = patientData.gender;
 
                 // Elimina los datos del localStorage si ya no son necesarios
-                localStorage.removeItem('patientData');
+                // localStorage.removeItem('patientData');
             }
         });
 
