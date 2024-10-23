@@ -58,3 +58,44 @@ async function AddPatient() {
         alert('Ocurrió un error al agregar el paciente. Inténtalo nuevamente más tarde.');
     }
 }
+
+async function AdminSearchPatient(ci) {
+    let patient = ci;
+    try {
+        // Realizar una solicitud POST al backend para leer el paciente
+        const response = await fetch('http://localhost:5000/admin_search', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ patient }),
+            credentials: 'include'
+        });
+
+        const result = await response.json();
+
+        // Verificar si la solicitud fue exitosa
+        if (response.ok) {
+            // alert('¡Paciente reconocido con éxito!');
+            let patientData = result[0];
+            // Copiando información
+            let name = patientData.name;
+            let lastname = patientData.lastname;
+            let ci = patientData.ci;
+            let birthdate = (patientData.birthdate).replace(/-/g, '/');
+            let age = patientData.age;
+            let height = patientData.height;
+            let weight = patientData.weight;
+            let gender = patientData.gender;
+
+            localStorage.setItem('patientData', JSON.stringify({ name, lastname, ci, birthdate, age, height, weight, gender }));
+            // Redirigir a la página del paciente recién creado
+            window.location.href = `/patients/${ci}`;
+        } else {
+            alert(`Error al buscar paciente: ${result.error}`);
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Ocurrió un error al buscar el paciente. Inténtalo nuevamente más tarde.');
+    }
+}
