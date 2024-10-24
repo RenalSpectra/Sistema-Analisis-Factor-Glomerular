@@ -52,7 +52,7 @@
                 <form id="form-info-patient" class="row g-3">
                     <div class="col-md-6">
                         <label for="inputName" class="form-label">Nombres:</label>
-                        <input type="text" readonly class="form-control-plaintext" id="floatingEmptyPlaintextInput" placeholder="First name">
+                        <input type="text" readonly class="form-control-plaintext" id="floating-inputName" placeholder="First name">
                     </div>
                     <div class="col-md-6">
                         <label for="inputLastName" class="form-label">Apellidos:</label>
@@ -86,7 +86,7 @@
                         <button type="submit" class="btn btn-primary">Sign in</button>
                     </div> -->
                     <div class="buttonsContainer">
-                        <a href="./modify-patient.html">
+                        <a href="{{ url_for('modify_patient') }}">
                             <div class="button">
                                 <img class="icon" src="../static/icons/ArrowRight.png" alt="">
                                 Modificar
@@ -114,7 +114,7 @@
             const patientData = JSON.parse(localStorage.getItem('patientData'));
 
             if (patientData) {
-                document.getElementById('floatingEmptyPlaintextInput').value = patientData.name;
+                document.getElementById('floating-inputName').value = patientData.name;
                 document.getElementById('floating-inputLastName').value = patientData.lastname;
                 document.getElementById('floating-inputCI').value = patientData.ci;
                 document.getElementById('floating-inputDateBirth').value = patientData.birthdate;

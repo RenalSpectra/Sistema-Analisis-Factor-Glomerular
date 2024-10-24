@@ -120,9 +120,6 @@ def search_patient():
     else:
         return render_template('403.html'), 403
 
-
-
-
 @app.route('/patients/<ci>', methods=['GET', 'PUT', 'DELETE'])
 def handle_patient(ci):
     if supabase.auth.get_session():
@@ -135,6 +132,18 @@ def handle_patient(ci):
             return jsonify(delete_patient(ci)), 200
     else:
         return render_template('403.html')
+    
+@app.route('/modifyPatient', methods=['GET', 'PUT'])
+def modify_patient():
+    if supabase.auth.get_session():
+        if request.method == 'GET':
+            return render_template('modify-patient.html')
+        # elif request.method == 'PUT':
+        #     data = request.json
+        #     return jsonify(update_patient(ci, data)), 200
+    else:
+        return render_template('403.html')
+    
 
 # CRUD para METRICS - solo los usuarios pueden hacer RUD
 @app.route('/api/metrics', methods=['POST'])
