@@ -129,7 +129,8 @@ async function ModifyPatient() {
 
     try {
         // Realizar una solicitud POST al backend para leer el paciente
-        const response = await fetch('http://localhost:5000/patients', {
+        const response = await fetch(`http://localhost:5000/patients/${ci}`, {
+
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
