@@ -85,15 +85,15 @@ def register_user():
 # CRUD para PATIENT
 @app.route('/patients', methods=['GET', 'POST'])
 def add_patient():
-    if request.method == 'GET':
-        return render_template ('add-patient.html')
-    if request.method == 'POST':
-        if supabase.auth.get_session():
-            data = request.json
-            result = create_patient(data)
-            return jsonify(result[0]), result[1]
-        else:
-            return render_template('403.html')
+    if supabase.auth.get_session():
+        if request.method == 'GET':
+            return render_template ('add-patient.html')
+        if request.method == 'POST':
+                data = request.json
+                result = create_patient(data)
+                return jsonify(result[0]), result[1]
+    else:
+        return render_template('403.html')
 
 @app.route('/admin_search', methods=['GET', 'POST'])
 def search_patient():
