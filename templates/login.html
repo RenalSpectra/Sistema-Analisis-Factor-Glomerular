@@ -59,10 +59,10 @@
                         <label for="exampleInputPassword1" class="form-label">Contraseña:</label>
                         <input type="password" class="form-control" id="adminPassword">
                     </div>
-                    <div class="mb-3 form-check">
+                    <!-- <div class="mb-3 form-check">
                         <input type="checkbox" class="form-check-input" id="rememberMe">
                         <label class="form-check-label" for="rememberMe">Recordarme</label>
-                    </div>
+                    </div> -->
                     <!-- <a href="./home-admin.html">
                         <div class="button">
                             <img class="icon" src="../assets/icons/ArrowRight.png" alt="">
@@ -85,7 +85,6 @@
         // Obtener los valores de los campos de entrada del formulario
         const email = document.getElementById('adminEmail').value;
         const password = document.getElementById('adminPassword').value;
-        const rememberMe = document.getElementById('rememberMe').checked;
         
         try {
             // Realizar una solicitud POST a la ruta de login del backend
