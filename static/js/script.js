@@ -195,3 +195,25 @@ async function deletePatient() {
         alert('Eliminación cancelada.');
     }
 }
+
+async function logOut() {
+    try {
+        const response = await fetch(`http://localhost:5000/logout`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            credentials: 'include'
+        });
+
+        if (response.ok) {
+            alert('¡Sesión cerrada!');
+            window.location.href = '/'; 
+        } else {
+            alert(`Error al cerrar sesión: ${result.error}`);
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Ocurrió un error al intentar cerrar sesión. Inténtalo nuevamente más tarde.');
+    }
+}
