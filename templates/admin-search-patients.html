@@ -51,14 +51,14 @@
                 <p>Ingrese CI de paciente:</p>
                 <div class="searchInputButton">
                     <form class="d-flex" role="search">
-                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                        <input id="id-to-search" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
                     </form>
-                    <a href="../pages/patient-info-patient.html">
+                    <!-- <a href="../pages/patient-info-patient.html">
                         <div class="button">
                             <img class="icon" src="../static/icons/MagnifyingGlass.png" alt="">
                             Buscar
                         </div>
-                    </a>
+                    </a> -->
                 </div>  
                 <div id="searchTable" class="table">
                     <div class="tableHeader">
@@ -154,6 +154,48 @@
         }
     });
 
+    const searchInput = document.getElementById("id-to-search");
+    const tableContent = document.querySelector(".tableContent");
+    const tableHeader = document.querySelector(".tableHeader");
+
+    // Crear el mensaje de "No se encontraron resultados"
+    const noResultsMessage = document.createElement("div");
+    noResultsMessage.textContent = "No se encontraron resultados";
+    noResultsMessage.style.display = "none"; // Oculto por defecto
+    noResultsMessage.style.textAlign = "center";
+    noResultsMessage.style.fontSize = "1.2em";
+    noResultsMessage.style.marginTop = "20px";
+    tableContent.parentElement.appendChild(noResultsMessage);
+
+    searchInput.addEventListener("input", () => {
+        const filter = searchInput.value.trim();
+        let hasResults = false; // Bandera para verificar si hay coincidencias
+
+        // Recorre cada elemento <ul> dentro de tableContent
+        Array.from(tableContent.children).forEach(row => {
+            const ci = row.querySelector("li").textContent.trim();
+
+            // Mostrar/ocultar la fila según coincidencia con el filtro
+            if (ci.includes(filter)) {
+                row.style.display = ""; // Mostrar si coincide
+                hasResults = true; // Indica que se encontró al menos una coincidencia
+            } else {
+                row.style.display = "none"; // Ocultar si no coincide
+            }
+        });
+
+        // Mostrar mensaje de "No se encontraron resultados" si no hay coincidencias
+        if (!hasResults) {
+            tableHeader.style.display = "none";
+            tableContent.style.display = "none"; // Ocultar tabla
+            noResultsMessage.style.display = "block"; // Mostrar mensaje
+            noResultsMessage.style.textAlign = "left";
+        } else {
+            tableHeader.style.display = "";
+            tableContent.style.display = ""; // Mostrar tabla
+            noResultsMessage.style.display = "none"; // Ocultar mensaje
+        }
+    });
     </script>
 </body>
 </html>

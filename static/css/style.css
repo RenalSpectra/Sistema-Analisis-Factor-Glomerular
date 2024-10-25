@@ -470,8 +470,9 @@ form a {
   min-height: 100dvh;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  /* justify-content: center; */
   padding: 0px 10%;
+  padding-top: 100px;
 }
 #patient-search-patients .search-container {
   display: flex;
@@ -518,13 +519,14 @@ form a {
 }
 #patient-search-patients .search-container .table .tableContent {
   width: 100%;
+  background-color: rgb(220, 248, 255) !important;
 }
 #patient-search-patients .search-container .table .tableContent > ul {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   padding-left: 0;
-  border-bottom: 1px solid black;
+  border-bottom: 1px solid var(--background-secondary-color);
   margin-bottom: 0;
 }
 #patient-search-patients .search-container .table .tableContent > ul > li {
