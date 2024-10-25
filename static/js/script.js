@@ -106,57 +106,52 @@ async function GoBackInfoPatient() {
 }
 
 async function ModifyPatient() {
-    let name = document.getElementById('m_inputName').value;
-    let lastname = document.getElementById('m_inputLastName').value;
+    // let name = document.getElementById('m_inputName').value;
+    // let lastname = document.getElementById('m_inputLastName').value;
     let ci = document.getElementById('m_inputCI').value;
-    let birthdate = document.getElementById('m_inputDateBirth').value;
+    // let birthdate = document.getElementById('m_inputDateBirth').value;
     // birthdate = birthdate.replace(/-/g, '/');
 
-    const hoy = new Date();
-    const nacimiento = new Date(document.getElementById('m_inputDateBirth').value);
-    let edad = hoy.getFullYear() - nacimiento.getFullYear();
-    const mes = hoy.getMonth() - nacimiento.getMonth();
+    // const hoy = new Date();
+    // const nacimiento = new Date(document.getElementById('m_inputDateBirth').value);
+    // let edad = hoy.getFullYear() - nacimiento.getFullYear();
+    // const mes = hoy.getMonth() - nacimiento.getMonth();
 
-    if (mes < 0 || (mes === 0 && hoy.getDate() < nacimiento.getDate())) {
-        edad--;
-    }
+    // if (mes < 0 || (mes === 0 && hoy.getDate() < nacimiento.getDate())) {
+    //     edad--;
+    // }
 
-    let age = edad;
+    // let age = edad;
 
     let weight = document.getElementById('m_inputWeight').value;
     let height = document.getElementById('m_inputHeight').value;
-    let gender = document.getElementById('m_inputGender').value;
+    // let gender = document.getElementById('m_inputGender').value;
 
     try {
         // Realizar una solicitud POST al backend para leer el paciente
         const response = await fetch(`http://localhost:5000/patients/${ci}`, {
-
-            method: 'PUT',
+            method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ ci, name, lastname, birthdate, age, gender, height, weight }),
+            body: JSON.stringify({ height, weight }),
             credentials: 'include'
         });
 
         const result = await response.json();
 
-        // Verificar si la solicitud fue exitosa
         if (response.ok) {
             alert('¡Datos del paciente actualizados con éxito!');
-            let patientData = result[0];
-            // Copiando información
-            let name = patientData.name;
-            let lastname = patientData.lastname;
-            let ci = patientData.ci;
-            let birthdate = (patientData.birthdate).replace(/-/g, '/');
-            let age = patientData.age;
-            let height = patientData.height;
-            let weight = patientData.weight;
-            let gender = patientData.gender;
-
-            localStorage.setItem('patientData', JSON.stringify({ name, lastname, ci, birthdate, age, height, weight, gender }));
-            // Redirigir a la página del paciente recién creado
+            // Actualizar datos
+            let patientData = JSON.parse(localStorage.getItem('patientData'));
+            if (patientData) {
+                // Actualizar los datos en localStorage
+                patientData.height = height;
+                patientData.weight = weight;
+                localStorage.setItem('patientData', JSON.stringify(patientData));
+            } else {
+                console.warn('No se encontró patientData en localStorage');
+            }
             window.location.href = `/patients/${ci}`;
         } else {
             alert(`Error al actualizar datos de paciente: ${result.error}`);
@@ -164,5 +159,39 @@ async function ModifyPatient() {
     } catch (error) {
         console.error('Error:', error);
         alert('Ocurrió un error al actualizar datos el paciente. Inténtalo nuevamente más tarde.');
+    }
+}
+
+async function deletePatient() {
+    let ci = document.getElementById('floating-inputCI').value;
+    console.log('Preevio mensaje confirmacion')
+    const confirmation = confirm("¿Estás seguro de que deseas eliminar al paciente? Esta acción no se puede deshacer.");
+    console.log('Post mensaje confirmacion')
+
+    if (confirmation) {
+        console.log('Mensjae confirmado')
+
+        try {
+            const response = await fetch(`http://localhost:5000/patients/${ci}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                credentials: 'include'
+            });
+
+            if (response.ok) {
+                alert('¡Paciente eliminado con éxito!');
+                window.location.href = '/home_admin'; // Ajusta la ruta de redirección según tu aplicación
+            } else {
+                const result = await response.json();
+                alert(`Error al eliminar paciente: ${result.error}`);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Ocurrió un error al intentar eliminar al paciente. Inténtalo nuevamente más tarde.');
+        }
+    } else {
+        alert('Eliminación cancelada.');
     }
 }
