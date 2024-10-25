@@ -11,10 +11,10 @@ def create_patient(data):
         existing_patient = supabase.table('patient').select('*').eq('ci', data['ci']).execute()
         if existing_patient.data:
             return {'error': 'Patient with this CI already exists'}, 400
-        patient_response = supabase.table('patient').insert(data).execute()
-        if not patient_response.data:
+        response = supabase.table('patient').insert(data).execute()
+        if not response.data:
             return {'error': 'Failed to add patient'}, 400
-        return {'patient': patient_response.data}, 201
+        return {'patient': response.data}, 201
     except Exception as e:
         return {'error': str(e)}, 400
 
@@ -27,10 +27,12 @@ def get_patient(ci):
     return response.data  # Devolver solo los datos
 
 def update_patient(ci, data):
-    return supabase.table('patient').update(data).eq('ci', ci).execute()
+    response =  supabase.table('patient').update(data).eq('ci', ci).execute()
+    return response.data
 
 def delete_patient(ci):
-    return supabase.table('patient').delete().eq('ci', ci).execute()
+    response =  supabase.table('patient').delete().eq('ci', ci).execute()
+    return response.data
 
 # CRUD para METRICS
 def create_metric(data):
@@ -55,13 +57,16 @@ def get_metrics(ci, date=None):
     query = supabase.table('metrics').select('*').eq('ci', ci)
     if date:
         query = query.eq('date', date)
-    return query.execute()
+    response =  query.execute()
+    return response.data
 
 def update_metric(ci, data):
-    return supabase.table('metrics').update(data).eq('ci', ci).execute()
+    response = supabase.table('metrics').update(data).eq('ci', ci).execute()
+    return response.data
 
 def delete_metric(ci):
-    return supabase.table('metrics').delete().eq('ci', ci).execute()
+    resposne = supabase.table('metrics').delete().eq('ci', ci).execute()
+    return resposne.data
 
 def create_pdf(ci):
     pass

@@ -120,12 +120,12 @@ def search_patient():
     else:
         return render_template('403.html'), 403
 
-@app.route('/patients/<ci>', methods=['GET', 'PUT', 'DELETE'])
+@app.route('/patients/<ci>', methods=['GET', 'PATCH', 'DELETE'])
 def handle_patient(ci):
     if supabase.auth.get_session():
         if request.method == 'GET':
             return render_template('admin-info-patient.html')
-        elif request.method == 'PUT':
+        elif request.method == 'PATCH':
             data = request.json
             return jsonify(update_patient(ci, data)), 200
         elif request.method == 'DELETE':
