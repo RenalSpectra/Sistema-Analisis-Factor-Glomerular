@@ -1,0 +1,13 @@
+#home-admin {
+    height: 100dvh;
+    background-color: var(--background-primary-color);
+    padding: 0px 0% 0px 10%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8rem;
+    & > img {
+        height: 100dvh;
+    }
+}

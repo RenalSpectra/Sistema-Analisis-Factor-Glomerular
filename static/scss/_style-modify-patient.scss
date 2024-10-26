@@ -1,0 +1,26 @@
+#modify-patient {
+    width: 100dvw;
+    height: 100dvh;
+    padding: 0 10%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    .infoPatientContainer > form {
+        z-index: 2;
+        & > div {
+            label {
+                font-weight: bold;
+                color: var(--title-color);
+            }
+        }
+        .buttonsContainer {
+            margin-top: 20px;
+            justify-content: center;
+        }
+    }
+}
+
+.disabled {
+    background-color: rgb(218, 218, 218) !important;
+}
