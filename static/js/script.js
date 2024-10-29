@@ -32,7 +32,7 @@ async function AddPatient() {
 
     try {
         // Realizar una solicitud POST al backend para crear el paciente
-        const response = await fetch('http://localhost:5000/patients', {
+        const response = await fetch('/patients', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -63,7 +63,7 @@ async function AdminSearchPatient(ci) {
     let patient = ci;
     try {
         // Realizar una solicitud POST al backend para leer el paciente
-        const response = await fetch('http://localhost:5000/admin_search', {
+        const response = await fetch('/admin_search', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -129,7 +129,7 @@ async function ModifyPatient() {
 
     try {
         // Realizar una solicitud POST al backend para leer el paciente
-        const response = await fetch(`http://localhost:5000/patients/${ci}`, {
+        const response = await fetch(`/patients/${ci}`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json'
@@ -172,7 +172,7 @@ async function deletePatient() {
         console.log('Mensjae confirmado')
 
         try {
-            const response = await fetch(`http://localhost:5000/patients/${ci}`, {
+            const response = await fetch(`/patients/${ci}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json'
@@ -198,7 +198,7 @@ async function deletePatient() {
 
 async function logOut() {
     try {
-        const response = await fetch(`http://localhost:5000/logout`, {
+        const response = await fetch(`/logout`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
