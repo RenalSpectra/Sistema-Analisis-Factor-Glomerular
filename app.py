@@ -5,7 +5,7 @@ from services import create_user, get_patient, create_patient, update_patient, d
 
 app = Flask(__name__)
 app.config['JWT_SECRET_KEY'] = SECRET_KEY
-CORS(app, supports_credentials=True, origins=allowed_origins)
+CORS(app, supports_credentials=True)
 
 # Ruta para registrar usuarios (solo admins)
 @app.route('/')
