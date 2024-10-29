@@ -175,4 +175,5 @@ def search_patient_o():
 @app.route('/patient_metrics', methods=['GET', 'POST'])
 def patient_handle_metrics():
     if request.method == 'GET':
-        return render_template('patient-analytics.html')
+        # return render_template('patient-analytics.html')
+        return render_template('403.html')

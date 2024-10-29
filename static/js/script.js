@@ -217,3 +217,19 @@ async function logOut() {
         alert('Ocurrió un error al intentar cerrar sesión. Inténtalo nuevamente más tarde.');
     }
 }
+
+async function searchPatients(){
+    try {
+        const response = await fetch('/patient_metrics', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            credentials: 'include'
+        });
+        
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Ocurrió un error.');
+    }
+}
