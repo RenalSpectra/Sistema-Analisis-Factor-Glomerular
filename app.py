@@ -160,7 +160,8 @@ def handle_metrics(ci):
         if request.method == 'POST':
             data = request.json
             if data['type'] == 'actualizar':
-                return jsonify(get_metrics(ci)), 200
+                result = get_metrics(ci)
+                return jsonify(result[0]), result[1]
             else:
                 return jsonify(create_pdf(ci)), 200
     else:
@@ -176,5 +177,10 @@ def patient_search_patient():
 @app.route('/patient_metrics', methods=['GET', 'POST'])
 def patient_handle_metrics():
     if request.method == 'GET':
-        # return render_template('patient-analytics.html')
-        return render_template('403.html')
+        return render_template('patient-analytics.html')
+        # return render_template('403.html')
+    if request.method == 'POST':
+        data = request.json
+        result = get_metrics(data['ci'])
+        return jsonify(result[0]), result[1]
+        
