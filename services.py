@@ -1,4 +1,4 @@
-from config import supabase
+from config import supabase, ADMIN, PASSWORD
 from models import calculate_ifg
 
 # User management
@@ -55,11 +55,14 @@ def create_metric(data):
     return response.data, 201
 
 def get_metrics(ci, date=None):
+    patient = supabase.table('patient').select('*').eq('ci', ci).execute()
+    if not patient.data:
+        return {"error": "Patient not found"}, 404
     query = supabase.table('metrics').select('*').eq('ci', ci)
     if date:
         query = query.eq('date', date)
     response =  query.execute()
-    return response.data
+    return response.data, 201
 
 def update_metric(ci, data):
     response = supabase.table('metrics').update(data).eq('ci', ci).execute()
