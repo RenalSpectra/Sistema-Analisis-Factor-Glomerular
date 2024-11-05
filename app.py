@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
-from config import supabase, SECRET_KEY, allowed_origins, ADMIN
+from config import supabase, SECRET_KEY, ADMIN
 from services import create_user, get_patient, create_patient, update_patient, delete_patient, get_all_patient, get_metrics, create_metric, create_pdf
 
 app = Flask(__name__)
@@ -149,7 +149,8 @@ def modify_patient():
 @app.route('/api/metrics', methods=['POST'])
 def add_metric():
     data = request.json
-    return jsonify(create_metric(data)), 201
+    response = create_metric(data)
+    return jsonify(response[0]), response[1]
 
 @app.route('/metrics/<ci>', methods=['GET', 'POST'])
 def handle_metrics(ci):
@@ -166,7 +167,7 @@ def handle_metrics(ci):
         return render_template('403.html')
 
 @app.route('/patient_search', methods=['GET', 'POST'])
-def search_patient_o():
+def patient_search_patient():
     if request.method == 'GET':
         return render_template('patient-search-patients.html')
     if request.method == 'POST':

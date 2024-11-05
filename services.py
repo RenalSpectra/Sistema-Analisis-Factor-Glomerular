@@ -51,7 +51,8 @@ def create_metric(data):
         'weight': weight,
         'ci': data['ci']
     }
-    return supabase.table('metrics').insert(metric).execute()
+    response = supabase.table('metrics').insert(metric).execute()
+    return response.data, 201
 
 def get_metrics(ci, date=None):
     query = supabase.table('metrics').select('*').eq('ci', ci)
