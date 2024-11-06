@@ -149,8 +149,11 @@ def modify_patient():
 @app.route('/api/metrics', methods=['POST'])
 def add_metric():
     data = request.json
-    response = create_metric(data)
-    return jsonify(response[0]), response[1]
+    if data['code'] == 'esp32espectra':
+        response = create_metric(data)
+        return jsonify(response[0]), response[1]
+    else:
+        return {"error": "Servicio no autorizado"}, 403
 
 @app.route('/metrics/<ci>', methods=['GET', 'POST'])
 def handle_metrics(ci):
