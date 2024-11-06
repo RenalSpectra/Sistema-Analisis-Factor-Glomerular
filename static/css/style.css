@@ -391,7 +391,6 @@ form a {
 }
 
 
-
 @media (max-width: 575px) {
   #home {
     padding: 5%;
@@ -659,6 +658,122 @@ form a {
   height: 100px;
   margin-left: 10px;
   margin-bottom: 5px;
+}
+
+/* ANALYTICS */
+
+.analytics-patient {
+  width: 100dvw;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  /* justify-content: center; */
+  padding: 0px 10%;
+  padding-top: 100px;
+  background-image: url(../img/doctor3.png);
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.analytics-patient > h1 {
+  color: #FFFFFF !important;
+}
+
+.analytics-patient .info-sup-container {
+  background-color: #FFFFFF;
+  display: flex;
+  flex-direction: row;
+  padding: 30px;
+}
+
+#form-analytics-patient > div {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+#form-analytics-patient > div label {
+  margin: 0;
+  width:25%;
+  font-weight: bold;
+  color: var(--title-color);
+}
+
+.container-rinon {
+  position: relative;
+  width: 50%;
+  background-color: #FFFFFF;
+  padding: 10px;
+}
+
+.rinon {
+  width: 150px; /* Ajusta el tamaño según sea necesario */
+  height: 300px; /* Ajusta el tamaño según sea necesario */
+  background-color: #34db3c; /* Color de fondo */
+  border-radius: 150px 0px 0px 150px; /* Bordes superiores redondeados */
+  position: relative; /* Para posicionar el pseudo-elemento */
+  display:flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-right: 70px;
+}
+
+.rinon .top-element {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 130px; /* Ajusta el tamaño según sea necesario */
+  height: 130px; /* Ajusta el tamaño según sea necesario */
+  background-color: #34db3c; /* Color de fondo */
+  border-radius: 50%; /* Forma circular */
+  transform: translateX(50%); /* Centra el pseudo-elemento */
+}
+
+.rinon .bottom-element {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 130px; /* Ajusta el tamaño según sea necesario */
+  height: 130px; /* Ajusta el tamaño según sea necesario */
+  background-color: #34db3c; /* Color de fondo */
+  border-radius: 50%; /* Forma circular */
+  transform: translateX(50%); /* Centra el pseudo-elemento */
+}
+
+.rinon .center-element1 {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: 0;
+  width: 40px; /* Ajusta el tamaño según sea necesario */
+  height: 40px; /* Ajusta el tamaño según sea necesario */
+  background-color: #34db3c;
+  z-index: 2;
+  transform: translate(50%,-50%);
+}
+.rinon .center-element2 {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: 0;
+  width: 40px; /* Ajusta el tamaño según sea necesario */
+  height: 45px; /* Ajusta el tamaño según sea necesario */
+  background-color: #ffffff;
+  z-index: 3;
+  border-radius: 50% 0 0 50%;
+  transform: translate(100%,-50%);
+}
+
+.barra {
+  width: 100%;
+  height: 40%;
+  background-color: aqua;
+  position: absolute;
+  bottom: 0;
 }
 
 /*# sourceMappingURL=style.css.map */

@@ -156,7 +156,7 @@ def add_metric():
 def handle_metrics(ci):
     if supabase.auth.get_session():
         if request.method == 'GET':
-            return render_template('analytics.html')
+            return render_template('admin-analytics.html')
         if request.method == 'POST':
             data = request.json
             if data['type'] == 'actualizar':
