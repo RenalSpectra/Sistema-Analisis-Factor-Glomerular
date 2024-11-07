@@ -32,7 +32,7 @@
                         </a>
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" href="{{ url_for('add_patient') }}">Añadir paciente</a></li>
-                            <li><a class="dropdown-item" href="./admin-search-patients.html">Buscar paciente</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('search_patient') }}">Buscar paciente</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -91,16 +91,16 @@
                                 Modificar
                             </div>
                         </a>
-                        <a href="./analytics.html">
-                            <div class="button">
-                                <img class="icon" src="../static/icons/TrendUp.png" alt="">
-                                Análisis
-                            </div>
-                        </a>
-                            <div class="button red-btn" onClick="deletePatient()">
-                                <img class="icon" src="../static/icons/ArrowRight.png" alt="">
-                                Eliminar
-                            </div>
+                        
+                        <div class="button" id ="adminWatchAnalytics">
+                            <img class="icon" src="../static/icons/TrendUp.png" alt="">
+                            Análisis
+                        </div>
+                        
+                        <div class="button red-btn" onClick="deletePatient()">
+                            <img class="icon" src="../static/icons/ArrowRight.png" alt="">
+                            Eliminar
+                        </div>
                     </div>
                 </form>
             </div>
@@ -122,6 +122,10 @@
 
                 // Elimina los datos del localStorage si ya no son necesarios
                 // localStorage.removeItem('patientData');
+
+                // Asignar función al botón con el CI como parámetro
+                const analyticsButton = document.getElementById('adminWatchAnalytics');
+                analyticsButton.onclick = () => adminWatchAnalytics(patientData.ci);
             }
         });
 

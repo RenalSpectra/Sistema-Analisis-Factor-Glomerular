@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
-from config import supabase, SECRET_KEY, allowed_origins, ADMIN
+from config import supabase, SECRET_KEY, ADMIN
 from services import create_user, get_patient, create_patient, update_patient, delete_patient, get_all_patient, get_metrics, create_metric, create_pdf
 
 app = Flask(__name__)
@@ -149,31 +149,39 @@ def modify_patient():
 @app.route('/api/metrics', methods=['POST'])
 def add_metric():
     data = request.json
-    return jsonify(create_metric(data)), 201
+    if data['code'] == 'esp32espectra':
+        response = create_metric(data)
+        return jsonify(response[0]), response[1]
+    else:
+        return {"error": "Servicio no autorizado"}, 403
 
 @app.route('/metrics/<ci>', methods=['GET', 'POST'])
 def handle_metrics(ci):
     if supabase.auth.get_session():
         if request.method == 'GET':
-            return render_template('analytics.html')
+            return render_template('admin-analytics.html')
         if request.method == 'POST':
             data = request.json
             if data['type'] == 'actualizar':
-                return jsonify(get_metrics(ci)), 200
+                result = get_metrics(ci)
+                return jsonify(result[0]), result[1]
             else:
                 return jsonify(create_pdf(ci)), 200
     else:
         return render_template('403.html')
 
-@app.route('/patient_search', methods=['GET', 'POST'])
-def search_patient_o():
+@app.route('/patient_search', methods=['GET'])
+def patient_search_patient():
     if request.method == 'GET':
         return render_template('patient-search-patients.html')
-    if request.method == 'POST':
-        return jsonify()
 
 @app.route('/patient_metrics', methods=['GET', 'POST'])
 def patient_handle_metrics():
     if request.method == 'GET':
-        # return render_template('patient-analytics.html')
-        return render_template('403.html')
+        return render_template('patient-analytics.html')
+        # return render_template('403.html')
+    if request.method == 'POST':
+        data = request.json
+        result = get_metrics(data['ci'])
+        return jsonify(result[0]), result[1]
+        

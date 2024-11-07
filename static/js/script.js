@@ -233,3 +233,30 @@ async function searchPatients(){
         alert('Ocurrió un error.');
     }
 }
+
+// Modificar la función para que no haga una solicitud innecesaria de 'GET'
+function adminWatchAnalytics(ci) {
+    try {
+        const patientData = JSON.parse(localStorage.getItem('patientData'));
+        if (patientData) {
+            // Guarda los datos de paciente en `localStorage` nuevamente por si acaso
+            localStorage.setItem('patientData', JSON.stringify({
+                name: patientData.name,
+                lastname: patientData.lastname,
+                ci: patientData.ci,
+                birthdate: patientData.birthdate,
+                age: patientData.age,
+                height: patientData.height,
+                weight: patientData.weight,
+                gender: patientData.gender
+            }));
+            // Redirige a la ruta con el CI del paciente
+            window.location.href = `/metrics/${ci}`;
+        } else {
+            alert("Error: No se encontró la información del paciente.");
+        }
+    } catch (error) {
+        console.error("Error:", error);
+        alert("Ocurrió un error. Inténtalo nuevamente más tarde.");
+    }
+}

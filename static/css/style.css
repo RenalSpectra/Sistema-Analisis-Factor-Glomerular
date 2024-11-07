@@ -313,6 +313,15 @@ form a {
   .navbar-menu a {
     font-size: 24px;
   }
+  .navbar .navbar-brand {
+    margin-left: 0;
+  }
+  .navbar .navbar-brand .logoHeader {
+    gap: 8px;
+  }
+  .logoHeader > span {
+    font-size: 20px !important;
+  }
 }
 #home {
   height: 100dvh;
@@ -332,6 +341,7 @@ form a {
   display: flex;
   flex-direction: column;
   gap: 15px;
+  width: 100%;
 }
 .projectDescription a {
   text-decoration: none;
@@ -372,6 +382,51 @@ form a {
 }
 #home-admin > img {
   height: 100dvh;
+}
+
+.img-mobile {
+  display: none;
+  margin: 0;
+  padding: 0;
+}
+
+
+@media (max-width: 575px) {
+  #home {
+    padding: 5%;
+    flex-direction: column-reverse;
+    justify-content: start;
+  }
+  #home > img {
+    height: 40%;
+    margin-top: 30px;
+    object-fit: cover;
+  }
+  #login {
+    padding: 5%;
+    flex-direction: column-reverse;
+    justify-content: start;
+  }
+  #login > img {
+    height: 40%;
+    margin-top: 30px;
+    object-fit: cover;
+  }
+  .img-desktop {
+    display: none;
+  }
+  .img-mobile {
+    display: block;
+  }
+  .button {
+    margin-top: 0;
+    width: 100%;
+    text-align: center;
+    justify-content:center;
+  }
+  .button img {
+    display: none;
+  }
 }
 
 #add-patient {
@@ -613,6 +668,150 @@ form a {
   height: 100px;
   margin-left: 10px;
   margin-bottom: 5px;
+}
+
+/* ANALYTICS */
+
+.analytics-patient {
+  width: 100dvw;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  /* justify-content: center; */
+  padding: 0px 10%;
+  padding-top: 100px;
+  background-image: url(../img/doctor3.png);
+  background-repeat: no-repeat;
+  background-size: cover;
+  padding-bottom: 100px;
+}
+
+.analytics-patient > h1 {
+  color: #FFFFFF !important;
+}
+
+.analytics-patient .info-sup-container {
+  /* background-color: #FFFFFF; */
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  height: 100%;
+  /* box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25); */
+}
+
+.infoPatientContainer {
+  background-color: #FFFFFF;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25); 
+  padding: 30px;
+}
+
+#form-analytics-patient > div {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+#form-analytics-patient > div label {
+  margin: 0;
+  width:25%;
+  font-weight: bold;
+  color: var(--title-color);
+}
+
+.container-rinon {
+  position: relative;
+  width: 80%;
+  background-color: #FFFFFF;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 60px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25); 
+}
+
+.rinon {
+  width: 150px; /* Ajusta el tamaño según sea necesario */
+  height: 300px; /* Ajusta el tamaño según sea necesario */
+  background-color: #34db3c; /* Color de fondo */
+  border-radius: 150px 0px 0px 150px; /* Bordes superiores redondeados */
+  position: relative; /* Para posicionar el pseudo-elemento */
+  display:flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-right: 70px;
+}
+
+.rinon > h1 {
+  z-index: 2;
+  font-size: 24px;
+}
+
+.rinon .top-element {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 130px; /* Ajusta el tamaño según sea necesario */
+  height: 130px; /* Ajusta el tamaño según sea necesario */
+  background-color: #34db3c; /* Color de fondo */
+  border-radius: 50%; /* Forma circular */
+  transform: translateX(50%); /* Centra el pseudo-elemento */
+}
+
+.rinon .bottom-element {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 130px; /* Ajusta el tamaño según sea necesario */
+  height: 130px; /* Ajusta el tamaño según sea necesario */
+  background-color: #34db3c; /* Color de fondo */
+  border-radius: 50%; /* Forma circular */
+  transform: translateX(50%); /* Centra el pseudo-elemento */
+}
+
+.rinon .center-element1 {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: 0;
+  width: 40px; /* Ajusta el tamaño según sea necesario */
+  height: 40px; /* Ajusta el tamaño según sea necesario */
+  background-color: #34db3c;
+  z-index: 2;
+  transform: translate(50%,-50%);
+}
+.rinon .center-element2 {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: 0;
+  width: 40px; /* Ajusta el tamaño según sea necesario */
+  height: 45px; /* Ajusta el tamaño según sea necesario */
+  background-color: #ffffff;
+  z-index: 3;
+  border-radius: 50% 0 0 50%;
+  transform: translate(100%,-50%);
+}
+
+.barra {
+  width: 100%;
+  height: 40%;
+  background-color: aqua;
+  position: absolute;
+  bottom: 0;
+}
+
+canvas {
+  background-color: #FFFFFF;
+  padding: 30px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
 }
 
 /*# sourceMappingURL=style.css.map */
