@@ -402,6 +402,16 @@ form a {
     margin-top: 30px;
     object-fit: cover;
   }
+  #login {
+    padding: 5%;
+    flex-direction: column-reverse;
+    justify-content: start;
+  }
+  #login > img {
+    height: 40%;
+    margin-top: 30px;
+    object-fit: cover;
+  }
   .img-desktop {
     display: none;
   }

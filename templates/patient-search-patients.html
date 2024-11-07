@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../style/css/style.css">
-    <link rel="icon" href="../assets/icons/rinon.png">
+    <link rel="stylesheet" href="../static/css/style.css">
+    <link rel="icon" href="../static/icons/rinon.png">
     <title>Renal Spectra</title>
     <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
@@ -15,8 +15,8 @@
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
         <div class="container-fluid">
             <div class="navbar-brand">
-                <a href="../index.html" class='logoHeader'>
-                    <img class='logo' alt="Renal Spectra Logo" src='../assets/icons/rinon.png' />
+                <a href="{{ url_for('init') }}" class='logoHeader'>
+                    <img class='logo' alt="Renal Spectra Logo" src='../static/icons/rinon.png' />
                     <span>Renal Spectra</span>
                 </a>
             </div>
@@ -36,9 +36,9 @@
                         </ul>
                     </li>
                 </ul> -->
-                <a href="../pages/login.html">
+                <a href="{{ url_for('login') }}">
                     <div class="button">
-                        <img class="icon" src="../assets/icons/User.png" alt="">
+                        <img class="icon" src="../static/icons/User.png" alt="">
                         Iniciar Sesión
                     </div>
                 </a>
@@ -53,47 +53,151 @@
                 <p>Ingrese CI de paciente:</p>
                 <div class="searchInputButton">
                     <form class="d-flex" role="search">
-                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                        <input id="id-to-search" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
                     </form>
-                    <a href="../pages/patient-info-patient.html">
+                    <!-- <a href="../pages/patient-info-patient.html">
                         <div class="button">
-                            <img class="icon" src="../assets/icons/MagnifyingGlass.png" alt="">
+                            <img class="icon" src="../static/icons/MagnifyingGlass.png" alt="">
                             Buscar
                         </div>
-                    </a>
+                    </a> -->
                 </div>  
                 <div id="searchTable" class="table">
                     <div class="tableHeader">
-                        <ul>
+                        <!-- <ul>
                             <li>CI</li>
                             <li>Nombres</li>
                             <li>Apellidos</li>
                             <li>Acción</li>
-                        </ul>
+                        </ul> -->
                     </div>
                     <div class="tableContent">
-                        <ul>
+                        <!-- <ul>
                             <li>CI</li>
                             <li>Nombres</li>
                             <li>Apellidos</li>
-                            <li><a href="./patient-analytics.html"><div class="button"><img src="../assets/icons/ArrowRight.png" alt="">Ver estado</div></a></li>
+                            <li><a href="./patient-analytics.html"><div class="button"><img src="../static/icons/ArrowRight.png" alt="">Ver estado</div></a></li>
                         </ul>
                         <ul>
                             <li>CI</li>
                             <li>Nombres</li>
                             <li>Apellidos</li>
-                            <li><a href="./patient-analytics.html"><div class="button"><img src="../assets/icons/ArrowRight.png" alt="">Ver estado</div></a></li>
+                            <li><a href="./patient-analytics.html"><div class="button"><img src="../static/icons/ArrowRight.png" alt="">Ver estado</div></a></li>
                         </ul>
                         <ul>
                             <li>CI</li>
                             <li>Nombres</li>
                             <li>Apellidos</li>
-                            <li><a href="./patient-analytics.html"><div class="button"><img src="../assets/icons/ArrowRight.png" alt="">Ver estado</div></a></li>
-                        </ul>
+                            <li><a href="./patient-analytics.html"><div class="button"><img src="../static/icons/ArrowRight.png" alt="">Ver estado</div></a></li>
+                        </ul> -->
                     </div>
                 </div>
             </div>
         </section>
     </main>
+    <script>
+        document.addEventListener("DOMContentLoaded", async() => {
+        let patient = 'all';  // Puedes ajustar esto según tus necesidades.
+        try {
+            // Realizar una solicitud POST al backend para obtener los datos de los pacientes
+            const response = await fetch('/patient_search', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ patient }),
+                credentials: 'include'
+            });
+
+            const result = await response.json();
+
+            // Verificar si la solicitud fue exitosa
+            if (response.ok) {
+                // alert('¡Información recuperada con éxito!');
+                const tableHeader = document.querySelector('.tableHeader');
+                tableHeader.innerHTML = `
+                    <ul>
+                        <li>CI</li>
+                        <li>Nombres</li>
+                        <li>Apellidos</li>
+                        <li>Acción</li>
+                    </ul>
+                `;
+
+                // Seleccionar el contenedor de los datos de la tabla
+                const tableContent = document.querySelector('.tableContent');
+
+                // Limpiar el contenido anterior
+                tableContent.innerHTML = '';
+
+                // Crear dinámicamente el contenido de la lista (<ul>) para cada paciente
+                result.forEach(paciente => {
+                    // Crear un elemento <ul>
+                    let ul = document.createElement('ul');
+
+                    // Insertar los elementos <li> con los datos de cada paciente
+                    ul.innerHTML = `
+                        <li>${paciente.ci}</li>
+                        <li>${paciente.name}</li>
+                        <li>${paciente.lastname}</li>
+                        <li><div class="button" onclick="AdminSearchPatient(${paciente.ci})"><img src="../static/icons/ArrowRight.png" alt="">Ver estado</div></li>
+                    `;
+
+                    // Agregar cada <ul> al contenedor 'tableContent'
+                    tableContent.appendChild(ul);
+                });
+
+            } else {
+                alert(`Error al recuperar los datos: ${result.error}`);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Ocurrió un error al recuperar la información. Inténtalo nuevamente más tarde.');
+        }
+    });
+
+    const searchInput = document.getElementById("id-to-search");
+    const tableContent = document.querySelector(".tableContent");
+    const tableHeader = document.querySelector(".tableHeader");
+
+    // Crear el mensaje de "No se encontraron resultados"
+    const noResultsMessage = document.createElement("div");
+    noResultsMessage.textContent = "No se encontraron resultados";
+    noResultsMessage.style.display = "none"; // Oculto por defecto
+    noResultsMessage.style.textAlign = "center";
+    noResultsMessage.style.fontSize = "1.2em";
+    noResultsMessage.style.marginTop = "20px";
+    tableContent.parentElement.appendChild(noResultsMessage);
+
+    searchInput.addEventListener("input", () => {
+        const filter = searchInput.value.trim();
+        let hasResults = false; // Bandera para verificar si hay coincidencias
+
+        // Recorre cada elemento <ul> dentro de tableContent
+        Array.from(tableContent.children).forEach(row => {
+            const ci = row.querySelector("li").textContent.trim();
+
+            // Mostrar/ocultar la fila según coincidencia con el filtro
+            if (ci.includes(filter)) {
+                row.style.display = ""; // Mostrar si coincide
+                hasResults = true; // Indica que se encontró al menos una coincidencia
+            } else {
+                row.style.display = "none"; // Ocultar si no coincide
+            }
+        });
+
+        // Mostrar mensaje de "No se encontraron resultados" si no hay coincidencias
+        if (!hasResults) {
+            tableHeader.style.display = "none";
+            tableContent.style.display = "none"; // Ocultar tabla
+            noResultsMessage.style.display = "block"; // Mostrar mensaje
+            noResultsMessage.style.textAlign = "left";
+        } else {
+            tableHeader.style.display = "";
+            tableContent.style.display = ""; // Mostrar tabla
+            noResultsMessage.style.display = "none"; // Ocultar mensaje
+        }
+    });
+    </script>
 </body>
 </html>
