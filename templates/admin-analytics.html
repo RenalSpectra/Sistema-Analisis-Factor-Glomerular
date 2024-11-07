@@ -137,8 +137,9 @@
                 });
 
                 if (response.ok) {
-                    // const metrics = await response.json();
-                    // // Aquí puedes actualizar el DOM con los datos de metrics
+                    const metrics = await response.json();
+                    console.log('Métricas recibidas:', metrics);
+                    // Aquí podrías también actualizar el DOM con los datos de metrics si lo necesitas
                     // displayMetrics(metrics);
                 } else {
                     const errorData = await response.json();
@@ -149,6 +150,7 @@
                 alert('Ocurrió un error al cargar las métricas. Inténtalo nuevamente más tarde.');
             }
         }
+
 
         // Función para mostrar las métricas en el DOM
         function displayMetrics(metrics) {
