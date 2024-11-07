@@ -1,5 +1,5 @@
 from config import supabase, ADMIN, PASSWORD
-from models import calculate_ifg
+from models import calculate_ifg, calculate_ifg_ckd_epi
 
 # User management
 def create_user(email, password):
@@ -43,7 +43,8 @@ def create_metric(data):
     gender = patient.data[0]['gender']
     height = patient.data[0]['height']
     weight = patient.data[0]['weight']
-    ifg = calculate_ifg(data['creatine'], age, gender, height, weight)
+    # ifg = calculate_ifg(data['creatine'], age, gender, height, weight)
+    ifg = calculate_ifg_ckd_epi(data['creatine'], age, gender)
     metric = {
         'creatine': data['creatine'],
         'ifg': ifg,
@@ -51,6 +52,8 @@ def create_metric(data):
         'weight': weight,
         'ci': data['ci']
     }
+    if 'date' in data:
+        metric['date'] = data['date']
     response = supabase.table('metrics').insert(metric).execute()
     return response.data, 201
 
@@ -58,11 +61,23 @@ def get_metrics(ci, date=None):
     patient = supabase.table('patient').select('*').eq('ci', ci).execute()
     if not patient.data:
         return {"error": "Patient not found"}, 404
-    query = supabase.table('metrics').select('*').eq('ci', ci)
+    query = supabase.table('metrics').select('creatine, ifg, date, weight').eq('ci', ci)
     if date:
         query = query.eq('date', date)
-    response =  query.execute()
-    return response.data, 201
+    response = query.order('date', desc=True).execute()
+    metrics = response.data
+    if not metrics:
+        return {"error": "No metrics found for this patient"}, 404
+
+    patient_info = patient.data[0]
+    latest_metric = metrics[0]
+    historical_metrics = metrics
+    result = {
+        "patient_info": patient_info,
+        "latest_metric": latest_metric,
+        "historical_metrics": historical_metrics
+    }
+    return result, 201
 
 def update_metric(ci, data):
     response = supabase.table('metrics').update(data).eq('ci', ci).execute()

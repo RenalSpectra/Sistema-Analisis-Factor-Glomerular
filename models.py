@@ -12,6 +12,8 @@ def calculate_ifg(creatine, age, gender, stature, weight):
     
 def calculate_ifg_ckd_epi(creatine, age, gender):
     tfg = None
+    creatine = float(creatine)
+    age = float(age)
     if gender == 'F':
         if creatine <= 0.7:
             tfg = 144 * ((creatine/0.7)**-0.329) * (0.993**age)
@@ -22,4 +24,4 @@ def calculate_ifg_ckd_epi(creatine, age, gender):
             tfg = 141 * ((creatine/0.9)**-0.411) * (0.993**age)
         else:
             tfg = 141 * ((creatine/0.9)**-1.209) * (0.993**age)
-    return tfg
+    return round(tfg, 2)
