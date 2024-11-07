@@ -170,12 +170,10 @@ def handle_metrics(ci):
     else:
         return render_template('403.html')
 
-@app.route('/patient_search', methods=['GET', 'POST'])
+@app.route('/patient_search', methods=['GET'])
 def patient_search_patient():
     if request.method == 'GET':
         return render_template('patient-search-patients.html')
-    if request.method == 'POST':
-        return jsonify()
 
 @app.route('/patient_metrics', methods=['GET', 'POST'])
 def patient_handle_metrics():
