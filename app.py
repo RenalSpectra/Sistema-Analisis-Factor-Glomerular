@@ -12,6 +12,13 @@ CORS(app, supports_credentials=True)
 def init():
     return render_template('index.html')
 
+@app.route('/healthcheck')
+def health_check():
+    return jsonify({
+        "status": "OK",
+        "message": "API is running",
+    }), 200
+
 @app.route('/signup', methods=['POST'])
 def signup():
     data = request.json
