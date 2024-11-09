@@ -10,4 +10,4 @@ services:
         path: "/healthcheck"
         schedule: "*/14 * * * *"
         method: "GET"
-        timeoutSeconds: 30
+        timeoutSeconds: 600
