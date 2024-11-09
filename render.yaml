@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: my-flask-api
+    env: python
+    plan: free
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "python app.py"
+    cronJobs:
+      - name: "Health Check every 14 minutes"
+        path: "/healthcheck"
+        schedule: "*/14 * * * *"
+        method: "GET"
+        timeoutSeconds: 30
