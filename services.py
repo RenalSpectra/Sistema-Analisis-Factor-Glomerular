@@ -1,5 +1,5 @@
 from config import supabase, ADMIN, PASSWORD
-from models import calculate_ifg, calculate_ifg_ckd_epi
+from models import calculate_ifg, calculate_ifg_ckd_epi, PDF
 
 # User management
 def create_user(email, password):
@@ -87,5 +87,10 @@ def delete_metric(ci):
     resposne = supabase.table('metrics').delete().eq('ci', ci).execute()
     return resposne.data
 
-def create_pdf(ci):
-    pass
+def create_pdf(ci, img, save_path):
+    patient = get_patient(ci)[0]
+    request_metrics = get_metrics(ci)
+    metrics = request_metrics[0]['historical_metrics'][::-1]
+    metric = request_metrics[0]['latest_metric']
+    pdf = PDF(patient, metric, metrics, img, save_path)
+    return pdf.build()
