@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, jsonify, render_template, redirect, url_for
 from flask_cors import CORS
 from config import supabase, SECRET_KEY, ADMIN
 from services import create_user, get_patient, create_patient, update_patient, delete_patient, get_all_patient, get_metrics, create_metric, create_pdf
@@ -179,9 +179,14 @@ def patient_search_patient():
 def patient_handle_metrics():
     if request.method == 'GET':
         return render_template('patient-analytics.html')
-        # return render_template('403.html')
+    
     if request.method == 'POST':
         data = request.json
-        result = get_metrics(data['ci'])
-        return jsonify(result[0]), result[1]
+        result = get_metrics(data['ci'])  # Este es el valor que obtienes de tu función get_metrics
+
+        if result is None:  # Verifica si no se encontró el paciente
+            return jsonify({"error": "Paciente no encontrado"}), 404  # Retorna error 404 si no se encuentra el paciente
         
+        # Si se encontró el paciente, devuelve los datos
+        return jsonify(result), 200
+
