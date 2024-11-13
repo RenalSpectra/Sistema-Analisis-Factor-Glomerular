@@ -115,6 +115,7 @@
                         <h1 id="renal-function">...</h1>
                     </div>
                     <p id="estadio">Estadio:</p>
+                    <p id="valor">IFG:</p>
                 </div>
             </div>
             <canvas id="myLineChart" width="400" height="200"></canvas>
@@ -180,7 +181,7 @@
                     let creat = latest.creatine;
                     document.getElementById('floating-inputFiltradoGlomerular').value = `${latest.ifg} mL/min/1.73 m²`;
                     document.getElementById('floating-inputCreatinina').value = `${latest.creatine} mg/dl`;
-                    
+                    document.getElementById('valor').innerHTML = `IFG: ${latest.ifg} mL/min/1.73 m²`;
                     if (ifg >= 90) {
                         document.getElementById('floating-inputEstadio').value = '1';
                         document.getElementById('estadio').innerHTML = 'Estadio: 1';

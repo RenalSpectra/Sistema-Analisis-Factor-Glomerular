@@ -105,14 +105,15 @@
                         <h1 id="renal-function">...</h1>
                     </div>
                     <p id="estadio">Estadio:</p>
+                    <p id="valor">IFG:</p>
                 </div>
             </div>
             <canvas id="myLineChart" width="400" height="200"></canvas>
             <div class="buttonsContainer">
-                <div class="button" id="refreshButton">
+                <!-- <div class="button" id="refreshButton">
                     <img class="icon" src="../static/icons/ArrowRight.png" alt="">
                     Actualizar Análisis
-                </div>
+                </div> -->
                 <!-- <a href="./analytics.html"> -->
                     <div class="button">
                         <img class="icon" src="../static/icons/TrendUp.png" alt="">
@@ -153,10 +154,10 @@
                     let creat = latest.creatine;
                     document.getElementById('floating-inputFiltradoGlomerular').value = `${latest.ifg} mL/min/1.73 m²`;
                     document.getElementById('floating-inputCreatinina').value = `${latest.creatine} mg/dl`;
-                    
+                    document.getElementById('valor').innerHTML = `IFG: ${latest.ifg} mL/min/1.73 m²`;
                     if (ifg >= 90) {
                         document.getElementById('floating-inputEstadio').value = '1';
-                        document.getElementById('estadio').innerHTML = 'Estadio: 1';
+                        document.getElementById('valor').innerHTML = 'Estadio: 1';
                         document.getElementById('floating-inputDescription').value = "Posible daño renal (p. ej., proteína en la orina) con función renal normal";
                         document.getElementById('renal-function').innerHTML = '90 - 100 %';                        document.getElementsByClassName('rinon')[0].style.backgroundColor = '#009583';
                         document.getElementsByClassName('top-element')[0].style.backgroundColor = '#009583';
