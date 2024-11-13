@@ -148,18 +148,18 @@ class PDF(FPDF):
     def _grafic_section(self):
         fig, ax = plt.subplots(figsize=(8, 6))
         plt.tight_layout(pad=6)
-        min_ifg = min(self.ifg_values) - 5
-        max_ifg = max(self.ifg_values) + 10
-        ax.set_ylim([min_ifg, max_ifg])
+        min_y= min(min(self.ifg_values), min(self.weight_values)) - 1 
+        max_y = max(max(self.ifg_values), max(self.weight_values)) + 1
+        ax.set_ylim(min_y, max_y)
         ax.plot(self.dates, self.ifg_values, color='#0E72C9', label='IFG', marker='o', linestyle='-')
-        ax.bar(self.dates, self.weight_values, color='#066405', alpha=0.5, label='Peso', width=0.5)
-        plt.title("Evolución de IFG", color='#273C7B', fontsize=24) #  y Peso
-        ax.set_xlabel('Fecha', fontsize=12)
-        ax.set_ylabel('IFG', fontsize=12) # Peso e 
+        ax.bar(self.dates, self.weight_values, color='#066405', alpha=0.5, label='Peso', width=0.8)
+        plt.title("Evolución de IFG", color='#273C7B', fontsize=24)
+        ax.set_xlabel('Fecha (dia/mes/año)', fontsize=12)
+        ax.set_ylabel('IFG: mL/min/1.73 m² / Peso: Kg', fontsize=12)
         ax.grid(True)
         ax.set_xticks(self.dates)
         ax.set_xticklabels([date for date in self.dates], rotation=60, ha='right')
-        ax.legend(loc='lower right', fontsize=10, frameon=True)
+        ax.legend(loc='upper right', fontsize=10, frameon=True)
         with tempfile.NamedTemporaryFile(suffix=".png", delete=False) as temp_file:
             fig.savefig(temp_file.name, format='png')
             plt.close(fig)
