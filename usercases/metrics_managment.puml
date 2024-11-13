@@ -1,0 +1,45 @@
+@startuml user_case
+title Aplicacion
+left to right direction
+actor "User" as U1
+actor Microcontrolador
+rectangle App{
+    actor "LogIn User" as U2
+    actor "LogIn User with Patient focus" as U3
+    package admin{
+        usecase "Login" as AdUC1
+        usecase "Logout" as AdUC2
+    }
+    package patient{
+        usecase "Registrar" as PUC1
+        usecase "Modificar" as PUC2
+        usecase "Eliminar" as PUC3
+        usecase "Buscar" as PUC4
+        usecase "Visualizar" as PUC5
+    }
+    package analytics {
+        usecase "Nuevo" as AUC1
+        usecase "Visualizar" as AUC2
+        usecase "Eliminar" as AUC3
+        usecase "Guardar" as AUC4
+        usecase "Generar Reporte" as AUC5
+    }
+}
+U1 --> AdUC1
+AdUC1 --> U2
+U2 --> AdUC2
+AdUC2 --> U1
+U2 --> PUC1
+U2 --> PUC4
+PUC1 --> PUC5
+PUC4 <--> PUC5
+PUC5 --> PUC2
+PUC5 --> PUC3
+PUC5 <--> U3
+Microcontrolador --> AUC1
+U3 --> AUC2
+AUC2 --> AUC1
+AUC1 --> AUC4
+AUC2 --> AUC3
+AUC2 --> AUC5
+@enduml

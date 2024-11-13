@@ -1,0 +1,15 @@
+@startuml user_case
+title Caso de Uso: Registro de usuario
+left to right direction
+actor "User" as U1
+rectangle App{
+    actor "LogIn User" as U2
+    package admin{
+        usecase "Login" as AdUC1
+        usecase "Logout" as AdUC2
+}
+U1 --> AdUC1 : iniciar sesón
+AdUC1 --> U2
+U2  --> AdUC2 : cerrar sesion
+AdUC2 --> U1
+@enduml
