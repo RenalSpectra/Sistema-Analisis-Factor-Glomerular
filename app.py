@@ -3,6 +3,7 @@ from flask_cors import CORS
 from config import supabase, SECRET_KEY, ADMIN
 from services import create_user, get_patient, create_patient, update_patient, delete_patient, get_all_patient, get_metrics, create_metric, create_pdf
 import os
+import threading
 
 app = Flask(__name__)
 app.config['JWT_SECRET_KEY'] = SECRET_KEY
@@ -195,24 +196,22 @@ def download_pdf():
     if request.method == 'POST':
         data = request.json
         ci = data.get('ci')
-
         if not ci:
             return {"error": "CI is required"}, 400
-
         # Rutas de archivos y otros parámetros
         img_path = os.path.join(app.root_path, 'static', 'icons', 'rinon.png')
         save_path = os.path.join(app.root_path, 'static', 'pdfs')
-
         # Generar PDF
         pdf_output_path = create_pdf(ci, img_path, save_path)
-
-        @after_this_request
-        def eliminar_pdf(response):
-            try:
-                os.remove(pdf_output_path)
-            except Exception as e:
-                print(f"Error eliminando el archivo: {e}")
-            return response
-
         # Enviar el PDF como respuesta
-        return send_file(pdf_output_path, as_attachment=True)
+        response = send_file(pdf_output_path, as_attachment=True, download_name=f"Reporte_Paciente_{data['ci']}.pdf")
+        threading.Timer(10, eliminar_pdf, [pdf_output_path]).start()
+        return response
+    
+def eliminar_pdf(file_path):
+    try:
+        if os.path.exists(file_path):
+            os.remove(file_path)
+            print(f"Archivo eliminado: {file_path}")
+    except Exception as e:
+        print(f"Error eliminando el archivo: {e}")

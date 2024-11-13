@@ -2,6 +2,8 @@ import os
 from datetime import datetime
 from fpdf import FPDF
 import matplotlib.pyplot as plt
+import matplotlib
+matplotlib.use('Agg') 
 import numpy as np
 import tempfile
 
@@ -146,8 +148,11 @@ class PDF(FPDF):
     def _grafic_section(self):
         fig, ax = plt.subplots(figsize=(8, 6))
         plt.tight_layout(pad=6)
+        min_ifg = min(self.ifg_values) - 5
+        max_ifg = max(self.ifg_values) + 10
+        ax.set_ylim([min_ifg, max_ifg])
         ax.plot(self.dates, self.ifg_values, color='#0E72C9', label='IFG', marker='o', linestyle='-')
-        # ax.bar(self.dates, self.weight_values, color='#066405', alpha=0.5, label='Peso', width=0.5)
+        ax.bar(self.dates, self.weight_values, color='#066405', alpha=0.5, label='Peso', width=0.5)
         plt.title("Evolución de IFG", color='#273C7B', fontsize=24) #  y Peso
         ax.set_xlabel('Fecha', fontsize=12)
         ax.set_ylabel('IFG', fontsize=12) # Peso e 
