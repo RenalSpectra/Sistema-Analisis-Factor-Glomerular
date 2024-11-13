@@ -1,7 +1,8 @@
-from flask import Flask, request, jsonify, render_template, redirect, url_for
+from flask import Flask, request, jsonify, render_template, send_file, url_for, after_this_request
 from flask_cors import CORS
 from config import supabase, SECRET_KEY, ADMIN
 from services import create_user, get_patient, create_patient, update_patient, delete_patient, get_all_patient, get_metrics, create_metric, create_pdf
+import os
 
 app = Flask(__name__)
 app.config['JWT_SECRET_KEY'] = SECRET_KEY
@@ -11,6 +12,13 @@ CORS(app, supports_credentials=True)
 @app.route('/')
 def init():
     return render_template('index.html')
+
+@app.route('/healthcheck')
+def health_check():
+    return jsonify({
+        "status": "OK",
+        "message": "API is running",
+    }), 200
 
 @app.route('/signup', methods=['POST'])
 def signup():
@@ -138,9 +146,6 @@ def modify_patient():
     if supabase.auth.get_session():
         if request.method == 'GET':
             return render_template('modify-patient.html')
-        # elif request.method == 'PUT':
-        #     data = request.json
-        #     return jsonify(update_patient(ci, data)), 200
     else:
         return render_template('403.html')
     
@@ -182,11 +187,21 @@ def patient_handle_metrics():
     
     if request.method == 'POST':
         data = request.json
-        result = get_metrics(data['ci'])  # Este es el valor que obtienes de tu función get_metrics
+        result = get_metrics(data['ci'])
+        return jsonify(result[0]), result[1]
 
-        if result is None:  # Verifica si no se encontró el paciente
-            return jsonify({"error": "Paciente no encontrado"}), 404  # Retorna error 404 si no se encuentra el paciente
-        
-        # Si se encontró el paciente, devuelve los datos
-        return jsonify(result), 200
-
+@app.route('/download_pdf', methods=['POST'])
+def download_pdf():
+    if request.method == 'POST':
+        data = request.json
+        img = os.path.join(app.root_path, 'static', 'icons', 'rinon.png')
+        save_path = os.path.join(app.root_path, 'static', 'pdfs')
+        pdf_output_path = create_pdf(data['ci'], img, save_path)
+        @after_this_request
+        def eliminar_pdf(response):
+            try:
+                os.remove(pdf_output_path)
+            except Exception as e:
+                print(f"Error eliminando el archivo: {e}")
+            return response
+        return send_file(pdf_output_path, as_attachment=True)

@@ -16,7 +16,7 @@
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
         <div class="container-fluid">
             <div class="navbar-brand">
-                <a href="{{ url_for('home_admin') }}" class='logoHeader'>
+                <a href="{{ url_for('init') }}" class='logoHeader'>
                     <img class='logo' alt="Renal Spectra Logo" src='../static/icons/rinon.png' />
                     <span>Renal Spectra</span>
                 </a>
@@ -26,21 +26,11 @@
             </button>
 
             <div class="collapse navbar-collapse" id="navbarScroll">
-                <ul class="navbar-nav my-lg-0 navbar-nav" style="--bs-scroll-height: 100px;">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Pacientes
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="{{ url_for('add_patient') }}">Añadir paciente</a></li>
-                            <li><a class="dropdown-item" href="{{ url_for('search_patient') }}">Buscar paciente</a></li>
-                        </ul>
-                    </li>
-                </ul>
-                <div class="button red-btn" onClick="logOut()">
-                    <img class="icon" src="../static/icons/User.png" alt="">
-                    Cerrar Sesión
-                </div>
+                <a href="{{ url_for('login') }}">
+                    <div class="button">
+                        <img class="icon" src="../static/icons/User.png" alt="">
+                        Iniciar Sesión
+                    </div>
                 </a>
             </div>
         </div>
@@ -143,6 +133,7 @@
                 document.getElementById('floating-inputGender').value = patientData.patient_info.gender;
                 document.getElementById('floating-inputWeight').value = patientData.patient_info.weight;
                 document.getElementById('floating-inputHeight').value = patientData.patient_info.height;
+                fetchMetrics(patientData);
             } else {
                 alert('La información del paciente no está disponible.');
             }
@@ -155,22 +146,9 @@
 
 
         // Función que se ejecuta al cargar la página
-        async function fetchMetrics(ci) {
-            try {
-                const response = await fetch(`/metrics/${ci}`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    credentials: 'include',
-                    body: JSON.stringify({ type: 'actualizar' })
-                });
+        async function fetchMetrics(patientData) {
 
-                if (response.ok) {
-                    const metrics = await response.json();
-                    console.log('Métricas recibidas:', metrics);
-                    
-                    const latest = metrics.latest_metric;
+                    const latest = patientData.latest_metric;
                     let ifg = latest.ifg;
                     let creat = latest.creatine;
                     document.getElementById('floating-inputFiltradoGlomerular').value = `${latest.ifg} mL/min/1.73 m²`;
@@ -238,15 +216,8 @@
                             }
                         }
                     }
-                    refreshChart(metrics.historical_metrics);
-                } else {
-                    const errorData = await response.json();
-                    alert(`Error al obtener métricas: ${errorData.error}`);
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                alert('Ocurrió un error al cargar las métricas. Inténtalo nuevamente más tarde.');
-            }
+                    refreshChart(patientData.historical_metrics);
+                
         }
 
         function refreshChart(metrics) {
