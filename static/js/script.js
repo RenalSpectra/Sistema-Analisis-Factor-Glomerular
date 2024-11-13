@@ -76,7 +76,6 @@ async function AdminSearchPatient(ci) {
 
         // Verificar si la solicitud fue exitosa
         if (response.ok) {
-            // alert('¡Paciente reconocido con éxito!');
             let patientData = result[0];
             // Copiando información
             let name = patientData.name;
@@ -106,26 +105,9 @@ async function GoBackInfoPatient() {
 }
 
 async function ModifyPatient() {
-    // let name = document.getElementById('m_inputName').value;
-    // let lastname = document.getElementById('m_inputLastName').value;
     let ci = document.getElementById('m_inputCI').value;
-    // let birthdate = document.getElementById('m_inputDateBirth').value;
-    // birthdate = birthdate.replace(/-/g, '/');
-
-    // const hoy = new Date();
-    // const nacimiento = new Date(document.getElementById('m_inputDateBirth').value);
-    // let edad = hoy.getFullYear() - nacimiento.getFullYear();
-    // const mes = hoy.getMonth() - nacimiento.getMonth();
-
-    // if (mes < 0 || (mes === 0 && hoy.getDate() < nacimiento.getDate())) {
-    //     edad--;
-    // }
-
-    // let age = edad;
-
     let weight = document.getElementById('m_inputWeight').value;
     let height = document.getElementById('m_inputHeight').value;
-    // let gender = document.getElementById('m_inputGender').value;
 
     try {
         // Realizar una solicitud POST al backend para leer el paciente
@@ -164,13 +146,9 @@ async function ModifyPatient() {
 
 async function deletePatient() {
     let ci = document.getElementById('floating-inputCI').value;
-    console.log('Preevio mensaje confirmacion')
     const confirmation = confirm("¿Estás seguro de que deseas eliminar al paciente? Esta acción no se puede deshacer.");
-    console.log('Post mensaje confirmacion')
 
     if (confirmation) {
-        console.log('Mensjae confirmado')
-
         try {
             const response = await fetch(`/patients/${ci}`, {
                 method: 'DELETE',
@@ -182,7 +160,7 @@ async function deletePatient() {
 
             if (response.ok) {
                 alert('¡Paciente eliminado con éxito!');
-                window.location.href = '/home_admin'; // Ajusta la ruta de redirección según tu aplicación
+                window.location.href = '/home_admin';
             } else {
                 const result = await response.json();
                 alert(`Error al eliminar paciente: ${result.error}`);
@@ -234,12 +212,10 @@ async function searchPatients(){
     }
 }
 
-// Modificar la función para que no haga una solicitud innecesaria de 'GET'
 function adminWatchAnalytics(ci) {
     try {
         const patientData = JSON.parse(localStorage.getItem('patientData'));
         if (patientData) {
-            // Guarda los datos de paciente en `localStorage` nuevamente por si acaso
             localStorage.setItem('patientData', JSON.stringify({
                 name: patientData.name,
                 lastname: patientData.lastname,

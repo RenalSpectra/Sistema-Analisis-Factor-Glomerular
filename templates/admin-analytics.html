@@ -51,11 +51,34 @@
             <div class="info-sup-container">
                 <div class='infoPatientContainer'>
                     <form id="form-analytics-patient" class="row g-3">
+                        <div class="col-md-12-title">
+                            <h4>Datos del paciente:</h4>
+                        </div>
                         <div class="col-md-12">
-                            <label for="inputNameLastName" class="form-label">Paciente:</label>
+                            <label for="inputCI" class="form-label">CI:</label>
+                            <input type="text" readonly class="form-control-plaintext" id="floating-inputCI" placeholder="...">
+                        </div>
+                        <div class="col-md-12">
+                            <label for="inputNameLastName" class="form-label">Nombre completo:</label>
                             <input type="text" readonly class="form-control-plaintext" id="floating-inputNameLastName" placeholder="...">
                         </div>
                         <div class="col-md-12">
+                            <label for="inputAge" class="form-label">Edad:</label>
+                            <input type="text" readonly class="form-control-plaintext" id="floating-inputAge" placeholder="...">
+                        </div>
+                        <div class="col-md-12">
+                            <label for="inputGender" class="form-label">Género:</label>
+                            <input type="text" readonly class="form-control-plaintext" id="floating-inputGender" placeholder="...">
+                        </div>
+                        <div class="col-md-12">
+                            <label for="inputWeight" class="form-label">Peso actual (kg):</label>
+                            <input type="text" readonly class="form-control-plaintext" id="floating-inputWeight" placeholder="...">
+                        </div>
+                        <div class="col-md-12">
+                            <label for="inputHeight" class="form-label">Altura actual (m):</label>
+                            <input type="text" readonly class="form-control-plaintext" id="floating-inputHeight" placeholder="...">
+                        </div>
+                        <div class="col-md-12-title">
                             <h4>Última lectura filtrado glomerular:</h4>
                         </div>
                         <div class="col-md-12">
@@ -70,7 +93,7 @@
                             <label for="inputFiltradoGlomerular" class="form-label">Valor:</label>
                             <input type="text" readonly class="form-control-plaintext" id="floating-inputFiltradoGlomerular" placeholder="...">
                         </div>
-                        <div class="col-md-12">
+                        <div class="col-md-12-title">
                             <h4>Última lectura Creatinina:</h4>
                         </div>
                         <div class="col-md-12">
@@ -80,6 +103,9 @@
                     </form>
                 </div>
                 <div class="container-rinon">
+                    <div class="col-md-12-title">
+                        <h4>Función Renal:</h4>
+                    </div>
                     <div class="rinon">
                         <div class="top-element"></div>
                         <div class="bottom-element"></div>
@@ -88,6 +114,8 @@
                         <!-- <div class="barra"></div> -->
                         <h1 id="renal-function">...</h1>
                     </div>
+                    <p id="estadio">Estadio:</p>
+                    <p id="valor">IFG:</p>
                 </div>
             </div>
             <canvas id="myLineChart" width="400" height="200"></canvas>
@@ -117,7 +145,11 @@
 
             if (patientData) {
                 document.getElementById('floating-inputNameLastName').value = patientData.name + ' ' + patientData.lastname;
-                
+                document.getElementById('floating-inputCI').value = patientData.ci
+                document.getElementById('floating-inputAge').value = patientData.age
+                document.getElementById('floating-inputGender').value = patientData.gender
+                document.getElementById('floating-inputWeight').value = patientData.weight
+                document.getElementById('floating-inputHeight').value = patientData.height
 
                 // Elimina los datos del localStorage si ya no son necesarios
                 // localStorage.removeItem('patientData');
@@ -147,11 +179,12 @@
                     const latest = metrics.latest_metric;
                     let ifg = latest.ifg;
                     let creat = latest.creatine;
-                    document.getElementById('floating-inputFiltradoGlomerular').value = `${latest.ifg}`;
-                    document.getElementById('floating-inputCreatinina').value = `${latest.creatine}`;
-                    
+                    document.getElementById('floating-inputFiltradoGlomerular').value = `${latest.ifg} mL/min/1.73 m²`;
+                    document.getElementById('floating-inputCreatinina').value = `${latest.creatine} mg/dl`;
+                    document.getElementById('valor').innerHTML = `IFG: ${latest.ifg} mL/min/1.73 m²`;
                     if (ifg >= 90) {
                         document.getElementById('floating-inputEstadio').value = '1';
+                        document.getElementById('estadio').innerHTML = 'Estadio: 1';
                         document.getElementById('floating-inputDescription').value = "Posible daño renal (p. ej., proteína en la orina) con función renal normal";
                         document.getElementById('renal-function').innerHTML = '90 - 100 %';                        document.getElementsByClassName('rinon')[0].style.backgroundColor = '#009583';
                         document.getElementsByClassName('top-element')[0].style.backgroundColor = '#009583';
@@ -160,6 +193,7 @@
                     } else {
                         if (ifg >= 60) {
                             document.getElementById('floating-inputEstadio').value = '2';
+                            document.getElementById('estadio').innerHTML = 'Estadio: 2';
                             document.getElementById('floating-inputDescription').value = "Daño renal con disminución leve de la función renal";
                             document.getElementById('renal-function').innerHTML = '60 - 89 %'
                             document.getElementsByClassName('rinon')[0].style.backgroundColor = '#CADB2A';
@@ -169,6 +203,7 @@
                         } else {
                             if (ifg >= 45) {
                                 document.getElementById('floating-inputEstadio').value = '3a';
+                                document.getElementById('estadio').innerHTML = 'Estadio: 3a';
                                 document.getElementById('floating-inputDescription').value = "Disminución de leve a moderada de la función renal";
                                 document.getElementById('renal-function').innerHTML = '45 - 59 %'
                                 document.getElementsByClassName('rinon')[0].style.backgroundColor = '#FAA63B';
@@ -178,6 +213,7 @@
                             } else {
                                 if (ifg >= 30) {
                                     document.getElementById('floating-inputEstadio').value = '3b';
+                                    document.getElementById('estadio').innerHTML = 'Estadio: 3b';
                                     document.getElementById('floating-inputDescription').value = "Disminución de moderada a grave de la función renal";
                                     document.getElementById('renal-function').innerHTML = '30 - 44 %'
                                     document.getElementsByClassName('rinon')[0].style.backgroundColor = '#FAA63B';
@@ -187,6 +223,7 @@
                                 } else {
                                     if (ifg >= 15) {
                                         document.getElementById('floating-inputEstadio').value = '4';
+                                        document.getElementById('estadio').innerHTML = 'Estadio: 4';
                                         document.getElementById('floating-inputDescription').value = "Disminución grave de la función renal";
                                         document.getElementById('renal-function').innerHTML = '15 - 29 %'
                                         document.getElementsByClassName('rinon')[0].style.backgroundColor = '#FAA63B';
@@ -195,6 +232,7 @@
                                         document.getElementsByClassName('center-element1')[0].style.backgroundColor = '#FAA63B';
                                     } else {
                                         document.getElementById('floating-inputEstadio').value = '5';
+                                        document.getElementById('estadio').innerHTML = 'Estadio: 5';
                                         document.getElementById('floating-inputDescription').value = "Insuficiencia renal";
                                         document.getElementById('renal-function').innerHTML = '< 15 %'
                                         document.getElementsByClassName('rinon')[0].style.backgroundColor = '#F25D21';
@@ -244,8 +282,8 @@
                         {
                             label: 'Peso (kg)', // Título de la serie de datos (barras de peso)
                             data: weightValues, // Datos de los valores de peso
-                            backgroundColor: '#66c7eb', // Color de las barras
-                            borderColor: '#0E72C9', // Color del borde de las barras
+                            backgroundColor: '#82B181', // Color de las barras
+                            borderColor: '#82B181', // Color del borde de las barras
                             borderWidth: 1, // Ancho del borde de las barras
                             type: 'bar', // Tipo de gráfico (barras)
                             yAxisID: 'y2' // Asociamos este dataset al eje Y secundario
