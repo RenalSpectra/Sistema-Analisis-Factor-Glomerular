@@ -125,7 +125,7 @@
                     Actualizar Análisis
                 </div>
                 <!-- <a href="./analytics.html"> -->
-                    <div class="button">
+                    <div class="button" onclick="GeneratePDF()">
                         <img class="icon" src="../static/icons/TrendUp.png" alt="">
                         Generar Reporte
                     </div>
@@ -319,6 +319,36 @@
             });
         }
 
+        async function GeneratePDF(){
+            const patientData = JSON.parse(localStorage.getItem('patientData'));
+            const ci = patientData.ci;
+            console.log(ci)
+            try {
+                const response = await fetch('/download_pdf', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ ci })
+                });
+
+                if (response.ok) {
+                    const blob = await response.blob();
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'Reporte.pdf';
+                    document.body.appendChild(a);
+                    a.click();
+                    a.remove();
+                    window.URL.revokeObjectURL(url);
+                } else {
+                    console.error('Error al descargar el PDF:', response.statusText);
+                }
+            } catch (error) {
+                console.error('Error en la solicitud:', error);
+            }
+        }
 
 
         // Función para mostrar las métricas en el DOM

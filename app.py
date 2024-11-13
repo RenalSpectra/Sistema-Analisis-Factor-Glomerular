@@ -194,9 +194,18 @@ def patient_handle_metrics():
 def download_pdf():
     if request.method == 'POST':
         data = request.json
-        img = os.path.join(app.root_path, 'static', 'icons', 'rinon.png')
+        ci = data.get('ci')
+
+        if not ci:
+            return {"error": "CI is required"}, 400
+
+        # Rutas de archivos y otros parámetros
+        img_path = os.path.join(app.root_path, 'static', 'icons', 'rinon.png')
         save_path = os.path.join(app.root_path, 'static', 'pdfs')
-        pdf_output_path = create_pdf(data['ci'], img, save_path)
+
+        # Generar PDF
+        pdf_output_path = create_pdf(ci, img_path, save_path)
+
         @after_this_request
         def eliminar_pdf(response):
             try:
@@ -204,4 +213,6 @@ def download_pdf():
             except Exception as e:
                 print(f"Error eliminando el archivo: {e}")
             return response
+
+        # Enviar el PDF como respuesta
         return send_file(pdf_output_path, as_attachment=True)
