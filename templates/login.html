@@ -24,17 +24,6 @@
             </button>
 
             <div class="collapse navbar-collapse" id="navbarScroll">
-                <!-- <ul class="navbar-nav my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Pacientes
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="../pages/add-patient.html">Añadir paciente</a></li>
-                            <li><a class="dropdown-item" href="../pages/search-patients.html">Buscar paciente</a></li>
-                        </ul>
-                    </li>
-                </ul> -->
                 <a href="{{ url_for('login') }}">
                     <div class="button">
                         <img class="icon" src="../static/icons/User.png" alt="">
@@ -53,22 +42,11 @@
                     <div class="mb-3">
                         <label for="exampleInputEmail1" class="form-label">Correo electrónico:</label>
                         <input type="email" class="form-control" id="adminEmail" aria-describedby="emailHelp">
-                        <!-- <div id="emailHelp" class="form-text">Nunca compartas tu correo con otras personas.</div> -->
                     </div>
                     <div class="mb-3">
                         <label for="exampleInputPassword1" class="form-label">Contraseña:</label>
                         <input type="password" class="form-control" id="adminPassword">
                     </div>
-                    <!-- <div class="mb-3 form-check">
-                        <input type="checkbox" class="form-check-input" id="rememberMe">
-                        <label class="form-check-label" for="rememberMe">Recordarme</label>
-                    </div> -->
-                    <!-- <a href="./home-admin.html">
-                        <div class="button">
-                            <img class="icon" src="../assets/icons/ArrowRight.png" alt="">
-                            Acceder
-                        </div>
-                    </a> -->
                     <div class="button" id="loginButton">
                         <img class="icon" src="../static/icons/ArrowRight.png" alt="">
                         Login

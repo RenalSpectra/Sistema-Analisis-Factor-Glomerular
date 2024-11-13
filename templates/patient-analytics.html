@@ -3,20 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../style/css/style.css">
-    <link rel="icon" href="../assets/icons/rinon.png">
+    <link rel="stylesheet" href="../static/css/style.css">
+    <link rel="icon" href="../static/icons/rinon.png">
     <title>Renal Spectra</title>
     <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="../static/js/script.js" ></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-    
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
         <div class="container-fluid">
             <div class="navbar-brand">
-                <a href="../index.html" class='logoHeader'>
-                    <img class='logo' alt="Renal Spectra Logo" src='../assets/icons/rinon.png' />
+                <a href="{{ url_for('init') }}" class='logoHeader'>
+                    <img class='logo' alt="Renal Spectra Logo" src='../static/icons/rinon.png' />
                     <span>Renal Spectra</span>
                 </a>
             </div>
@@ -25,78 +26,309 @@
             </button>
 
             <div class="collapse navbar-collapse" id="navbarScroll">
-                <!-- <ul class="navbar-nav my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Pacientes
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="../pages/add-patient.html">Añadir paciente</a></li>
-                            <li><a class="dropdown-item" href="../pages/search-patients.html">Buscar paciente</a></li>
-                        </ul>
-                    </li>
-                </ul> -->
-                <a href="../pages/login.html">
+                <a href="{{ url_for('login') }}">
                     <div class="button">
-                        <img class="icon" src="../assets/icons/User.png" alt="">
+                        <img class="icon" src="../static/icons/User.png" alt="">
                         Iniciar Sesión
                     </div>
                 </a>
             </div>
         </div>
     </nav>
-
     <main>
-        <section id="patient-analytics">
-            <div class="analytics-container">
-                <h1>Análisis:</h1>
-                <div class="container">
-                    
-                </div>
-                <p>Ingrese CI de paciente:</p>
-                <div class="searchInputButton">
-                    <form class="d-flex" role="search">
-                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                    </form>
-                    <a href="../pages/patient-info-patient.html">
-                        <div class="button">
-                            <img class="icon" src="../assets/icons/MagnifyingGlass.png" alt="">
-                            Buscar
+        <section class="analytics-patient">
+            <h1>Análisis:</h1>
+            <div class="info-sup-container">
+                <div class='infoPatientContainer'>
+                    <form id="form-analytics-patient" class="row g-3">
+                        <div class="col-md-12-title">
+                            <h4>Datos del paciente:</h4>
                         </div>
-                    </a>
-                </div>  
-                <div id="searchTable" class="table">
-                    <div class="tableHeader">
-                        <ul>
-                            <li>CI</li>
-                            <li>Nombres</li>
-                            <li>Apellidos</li>
-                            <li>Acción</li>
-                        </ul>
-                    </div>
-                    <div class="tableContent">
-                        <ul>
-                            <li>CI</li>
-                            <li>Nombres</li>
-                            <li>Apellidos</li>
-                            <li><a href="./admin-analytics.html"><div class="button"><img src="../assets/icons/ArrowRight.png" alt="">Ver estado</div></a></li>
-                        </ul>
-                        <ul>
-                            <li>CI</li>
-                            <li>Nombres</li>
-                            <li>Apellidos</li>
-                            <li><a href="./admin-analytics.html"><div class="button"><img src="../assets/icons/ArrowRight.png" alt="">Ver estado</div></a></li>
-                        </ul>
-                        <ul>
-                            <li>CI</li>
-                            <li>Nombres</li>
-                            <li>Apellidos</li>
-                            <li><a href="./admin-analytics.html"><div class="button"><img src="../assets/icons/ArrowRight.png" alt="">Ver estado</div></a></li>
-                        </ul>
-                    </div>
+                        <div class="col-md-12">
+                            <label for="inputCI" class="form-label">CI:</label>
+                            <input type="text" readonly class="form-control-plaintext" id="floating-inputCI" placeholder="...">
+                        </div>
+                        <div class="col-md-12">
+                            <label for="inputNameLastName" class="form-label">Nombre completo:</label>
+                            <input type="text" readonly class="form-control-plaintext" id="floating-inputNameLastName" placeholder="...">
+                        </div>
+                        <div class="col-md-12">
+                            <label for="inputAge" class="form-label">Edad:</label>
+                            <input type="text" readonly class="form-control-plaintext" id="floating-inputAge" placeholder="...">
+                        </div>
+                        <div class="col-md-12">
+                            <label for="inputGender" class="form-label">Género:</label>
+                            <input type="text" readonly class="form-control-plaintext" id="floating-inputGender" placeholder="...">
+                        </div>
+                        <div class="col-md-12">
+                            <label for="inputWeight" class="form-label">Peso actual (kg):</label>
+                            <input type="text" readonly class="form-control-plaintext" id="floating-inputWeight" placeholder="...">
+                        </div>
+                        <div class="col-md-12">
+                            <label for="inputHeight" class="form-label">Altura actual (m):</label>
+                            <input type="text" readonly class="form-control-plaintext" id="floating-inputHeight" placeholder="...">
+                        </div>
+                        <div class="col-md-12-title">
+                            <h4>Última lectura filtrado glomerular:</h4>
+                        </div>
+                        <div class="col-md-12">
+                            <label for="inputEstadio" class="form-label">Estadio:</label>
+                            <input type="text" readonly class="form-control-plaintext" id="floating-inputEstadio" placeholder="...">
+                        </div>
+                        <div class="col-md-12">
+                            <label for="inputDescripcion" class="form-label">Descripción:</label>
+                            <input type="text" readonly class="form-control-plaintext" id="floating-inputDescription" placeholder="...">
+                        </div>
+                        <div class="col-md-12">
+                            <label for="inputFiltradoGlomerular" class="form-label">Valor:</label>
+                            <input type="text" readonly class="form-control-plaintext" id="floating-inputFiltradoGlomerular" placeholder="...">
+                        </div>
+                        <div class="col-md-12-title">
+                            <h4>Última lectura Creatinina:</h4>
+                        </div>
+                        <div class="col-md-12">
+                            <label for="inputCreatinina" class="form-label">Valor:</label>
+                            <input type="text" readonly class="form-control-plaintext" id="floating-inputCreatinina" placeholder="...">
+                        </div>
+                    </form>
                 </div>
+                <div class="container-rinon">
+                    <div class="col-md-12-title">
+                        <h4>Función Renal:</h4>
+                    </div>
+                    <div class="rinon">
+                        <div class="top-element"></div>
+                        <div class="bottom-element"></div>
+                        <div class="center-element1"></div>
+                        <div class="center-element2"></div>
+                        <!-- <div class="barra"></div> -->
+                        <h1 id="renal-function">...</h1>
+                    </div>
+                    <p id="estadio">Estadio:</p>
+                    <p id="valor">IFG:</p>
+                </div>
+            </div>
+            <div class="graphicChart">
+                <h4>Evolución de IFG</h4>
+                <canvas id="myLineChart" width="400" height="200"></canvas>
+            </div>
+            <div class="buttonsContainer">
+                <!-- <div class="button" id="refreshButton">
+                    <img class="icon" src="../static/icons/ArrowRight.png" alt="">
+                    Actualizar Análisis
+                </div> -->
+                <!-- <a href="./analytics.html"> -->
+                    <div class="button" onClick="GeneratePDF()">
+                        <img class="icon" src="../static/icons/TrendUp.png" alt="">
+                        Generar Reporte
+                    </div>
+                <!-- </a> -->
             </div>
         </section>
     </main>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const patientData = JSON.parse(localStorage.getItem('patientData'));
+            console.log(patientData);
+            if (patientData && patientData.patient_info) {
+                document.getElementById('floating-inputNameLastName').value = patientData.patient_info.name + ' ' + patientData.patient_info.lastname;
+                document.getElementById('floating-inputCI').value = patientData.patient_info.ci;
+                document.getElementById('floating-inputAge').value = patientData.patient_info.age;
+                document.getElementById('floating-inputGender').value = patientData.patient_info.gender;
+                document.getElementById('floating-inputWeight').value = patientData.patient_info.weight;
+                document.getElementById('floating-inputHeight').value = patientData.patient_info.height;
+                fetchMetrics(patientData);
+            } else {
+                alert('La información del paciente no está disponible.');
+            }
+
+        });
+
+        document.getElementById('refreshButton').addEventListener('click', function() {
+            location.reload(); // Esto recarga la página
+        });
+
+
+        // Función que se ejecuta al cargar la página
+        async function fetchMetrics(patientData) {
+
+                    const latest = patientData.latest_metric;
+                    let ifg = latest.ifg;
+                    let creat = latest.creatine;
+                    document.getElementById('floating-inputFiltradoGlomerular').value = `${latest.ifg} mL/min/1.73 m²`;
+                    document.getElementById('floating-inputCreatinina').value = `${latest.creatine} mg/dl`;
+                    document.getElementById('valor').innerHTML = `IFG: ${latest.ifg} mL/min/1.73 m²`;
+                    if (ifg >= 90) {
+                        document.getElementById('floating-inputEstadio').value = '1';
+                        document.getElementById('valor').innerHTML = 'Estadio: 1';
+                        document.getElementById('floating-inputDescription').value = "Posible daño renal (p. ej., proteína en la orina) con función renal normal";
+                        document.getElementById('renal-function').innerHTML = '90 - 100 %';                        document.getElementsByClassName('rinon')[0].style.backgroundColor = '#009583';
+                        document.getElementsByClassName('top-element')[0].style.backgroundColor = '#009583';
+                        document.getElementsByClassName('bottom-element')[0].style.backgroundColor = '#009583';
+                        document.getElementsByClassName('center-element1')[0].style.backgroundColor = '#009583';
+                    } else {
+                        if (ifg >= 60) {
+                            document.getElementById('floating-inputEstadio').value = '2';
+                            document.getElementById('estadio').innerHTML = 'Estadio: 2';
+                            document.getElementById('floating-inputDescription').value = "Daño renal con disminución leve de la función renal";
+                            document.getElementById('renal-function').innerHTML = '60 - 89 %'
+                            document.getElementsByClassName('rinon')[0].style.backgroundColor = '#CADB2A';
+                            document.getElementsByClassName('top-element')[0].style.backgroundColor = '#CADB2A';
+                            document.getElementsByClassName('bottom-element')[0].style.backgroundColor = '#CADB2A';
+                            document.getElementsByClassName('center-element1')[0].style.backgroundColor = '#CADB2A';
+                        } else {
+                            if (ifg >= 45) {
+                                document.getElementById('floating-inputEstadio').value = '3a';
+                                document.getElementById('estadio').innerHTML = 'Estadio: 3a';
+                                document.getElementById('floating-inputDescription').value = "Disminución de leve a moderada de la función renal";
+                                document.getElementById('renal-function').innerHTML = '45 - 59 %'
+                                document.getElementsByClassName('rinon')[0].style.backgroundColor = '#FAA63B';
+                                document.getElementsByClassName('top-element')[0].style.backgroundColor = '#FAA63B';
+                                document.getElementsByClassName('bottom-element')[0].style.backgroundColor = '#FAA63B';
+                                document.getElementsByClassName('center-element1')[0].style.backgroundColor = '#FAA63B';
+                            } else {
+                                if (ifg >= 30) {
+                                    document.getElementById('floating-inputEstadio').value = '3b';
+                                    document.getElementById('estadio').innerHTML = 'Estadio: 3b';
+                                    document.getElementById('floating-inputDescription').value = "Disminución de moderada a grave de la función renal";
+                                    document.getElementById('renal-function').innerHTML = '30 - 44 %'
+                                    document.getElementsByClassName('rinon')[0].style.backgroundColor = '#FAA63B';
+                                    document.getElementsByClassName('top-element')[0].style.backgroundColor = '#FAA63B';
+                                    document.getElementsByClassName('bottom-element')[0].style.backgroundColor = '#FAA63B';
+                                    document.getElementsByClassName('center-element1')[0].style.backgroundColor = '#FAA63B';
+                                } else {
+                                    if (ifg >= 15) {
+                                        document.getElementById('floating-inputEstadio').value = '4';
+                                        document.getElementById('estadio').innerHTML = 'Estadio: 4';
+                                        document.getElementById('floating-inputDescription').value = "Disminución grave de la función renal";
+                                        document.getElementById('renal-function').innerHTML = '15 - 29 %'
+                                        document.getElementsByClassName('rinon')[0].style.backgroundColor = '#FAA63B';
+                                        document.getElementsByClassName('top-element')[0].style.backgroundColor = '#FAA63B';
+                                        document.getElementsByClassName('bottom-element')[0].style.backgroundColor = '#FAA63B';
+                                        document.getElementsByClassName('center-element1')[0].style.backgroundColor = '#FAA63B';
+                                    } else {
+                                        document.getElementById('floating-inputEstadio').value = '5';
+                                        document.getElementById('estadio').innerHTML = 'Estadio: 5';
+                                        document.getElementById('floating-inputDescription').value = "Insuficiencia renal";
+                                        document.getElementById('renal-function').innerHTML = '< 15 %'
+                                        document.getElementsByClassName('rinon')[0].style.backgroundColor = '#F25D21';
+                                        document.getElementsByClassName('top-element')[0].style.backgroundColor = '#F25D21';
+                                        document.getElementsByClassName('bottom-element')[0].style.backgroundColor = '#F25D21';
+                                        document.getElementsByClassName('center-element1')[0].style.backgroundColor = '#F25D21';
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    refreshChart(patientData.historical_metrics);
+                
+        }
+
+        async function GeneratePDF(){
+            const patientData = JSON.parse(localStorage.getItem('patientData'));
+            const ci = patientData.patient_info.ci;
+            console.log(ci)
+            try {
+                const response = await fetch('/download_pdf', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ ci })
+                });
+
+                if (response.ok) {
+                    const blob = await response.blob();
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'Reporte.pdf';
+                    document.body.appendChild(a);
+                    a.click();
+                    a.remove();
+                    window.URL.revokeObjectURL(url);
+                } else {
+                    console.error('Error al descargar el PDF:', response.statusText);
+                }
+            } catch (error) {
+                console.error('Error en la solicitud:', error);
+            }
+        }
+
+        function refreshChart(metrics) {
+            // Preparamos las fechas, los valores de IFG y los valores de peso para los ejes X e Y
+            const labels = metrics.map(metric => metric.date).reverse(); // Extraemos las fechas
+            const ifgValues = metrics.map(metric => metric.ifg).reverse(); // Extraemos los valores de IFG
+            const weightValues = metrics.map(metric => metric.weight).reverse(); // Extraemos los valores de peso
+            
+            // Obtenemos el contexto del canvas donde dibujaremos el gráfico
+            const ctx = document.getElementById('myLineChart').getContext('2d');
+
+            // Creamos el gráfico
+            const myLineChart = new Chart(ctx, {
+                type: 'line', // Tipo de gráfico (línea)
+                data: {
+                    labels: labels, // Fechas como etiquetas del eje X
+                    datasets: [
+                        {
+                            label: 'IFG', // Título de la serie de datos (línea de IFG)
+                            data: ifgValues, // Datos de los valores de IFG
+                            borderColor: '#0E72C9', // Color de la línea de IFG
+                            fill: false, // No llenar el área bajo la línea
+                            tension: 0.1, // Curvatura de la línea
+                            borderWidth: 2, // Ancho de la línea
+                            yAxisID: 'y1' // Asociamos este dataset al eje Y primario
+                        },
+                        {
+                            label: 'Peso (kg)', // Título de la serie de datos (barras de peso)
+                            data: weightValues, // Datos de los valores de peso
+                            backgroundColor: '#82B181', // Color de las barras
+                            borderColor: '#82B181', // Color del borde de las barras
+                            borderWidth: 1, // Ancho del borde de las barras
+                            type: 'bar', // Tipo de gráfico (barras)
+                            yAxisID: 'y2' // Asociamos este dataset al eje Y secundario
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Fecha' // Título del eje X
+                            }
+                        },
+                        y1: {
+                            title: {
+                                display: true,
+                                text: 'IFG' // Título del eje Y primario
+                            },
+                            beginAtZero: false // No es necesario comenzar desde cero en este caso
+                        },
+                        y2: {
+                            title: {
+                                display: true,
+                                text: 'Peso' // Título del eje Y secundario
+                            },
+                            beginAtZero: false, // Dependiendo del rango de pesos, puedes ajustar esto
+                            position: 'right' // Colocamos el eje Y secundario a la derecha
+                        }
+                    }
+                }
+            });
+        }
+
+
+
+        // Función para mostrar las métricas en el DOM
+        function displayMetrics(metrics) {
+            // Ejemplo de cómo podrías actualizar el contenido de tu HTML con los datos de las métricas
+            document.getElementById('metricName').innerText = metrics.name; // Nombre del paciente
+            document.getElementById('metricValue').innerText = metrics.someMetricField; // Otros datos relevantes
+            // Agrega más campos según los datos que obtengas de la base de datos
+        }
+
+    </script>
 </body>
 </html>

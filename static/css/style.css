@@ -427,6 +427,13 @@ form a {
   .button img {
     display: none;
   }
+  .searchInputButton {
+    flex-direction: column;
+    gap: 10px;
+  }
+  .me-2{
+    margin-right: 0rem !important;
+  }
 }
 
 #add-patient {
@@ -695,16 +702,13 @@ form a {
   /* background-color: #FFFFFF; */
   display: flex;
   flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  gap: 20px;
   height: 100%;
+  background-color: #FFFFFF;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25); 
   /* box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25); */
 }
 
 .infoPatientContainer {
-  background-color: #FFFFFF;
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25); 
   padding: 30px;
 }
 
@@ -723,15 +727,12 @@ form a {
 
 .container-rinon {
   position: relative;
-  width: 80%;
-  background-color: #FFFFFF;
+  width: 100%;
   padding: 10px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 60px;
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25); 
+  margin-right: 150px;
+  padding: 30px; 
 }
 
 .rinon {
@@ -808,10 +809,253 @@ form a {
   bottom: 0;
 }
 
-canvas {
+.graphicChart {
   background-color: #FFFFFF;
   padding: 30px;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.col-md-12{
+  margin-top: 0 !important;
+}
+
+.search-button {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.search-button > p {
+  color: #FFFFFF;
+  margin-bottom: 0;
+}
+
+@media (max-width: 575px) {
+  #home {
+    gap: 2rem;
+  }
+  #login {
+    width: 100%;
+    padding-left: 5%;
+    padding-right: 5%;
+    gap: 1rem;
+  }
+  #login > div {
+    width: 100%;
+  }
+  #home-admin {
+    padding: 5%;
+    flex-direction: column-reverse;
+    justify-content: start;
+    gap: 2rem;
+  }
+  #home-admin > img {
+    height: 40%;
+    margin-top: 30px;
+    object-fit: cover;
+  }
+  .buttonsContainer{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  #login {
+    padding: 5%;
+    flex-direction: column-reverse;
+    justify-content: start;
+  }
+  #login > img {
+    height: 40%;
+    margin-top: 30px;
+    object-fit: cover;
+  }
+  #add-patient {
+    padding-top: 100px;
+    width: 100%;
+    min-height: 100dvh;
+    height: auto;
+    padding-left: 5%;
+    padding-right: 5%;
+    padding-bottom: 50px;
+  }
+  #patient-search-patients {
+    padding-bottom: 50px;
+  }
+  .search-button {
+    display: flex;
+    flex-direction: row;
+    gap: 0;
+    padding-right: 15px;
+    padding-left: 15px;
+  }
+  .search-button > img {
+    display: block;
+  }
+  .search-button > p {
+    display: none;
+  }
+  #admin-info-patient{
+    width: 100%;
+    padding-right: 15px;
+    padding-left: 15px;
+    padding-top: 100px;
+    padding-bottom: 100px;
+    height: auto;
+  }
+  #admin-info-patient .infoPatientContainer {
+    padding: 15px;
+    border-radius: 0;
+  }
+  #admin-info-patient .infoPatientContainer > form{
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+  }
+  #admin-info-patient .infoPatientContainer > form > div {
+    width: 100%;
+    margin-top: 0;
+  }
+  #admin-info-patient .infoPatientContainer > form > div label {
+    margin-bottom: 0;
+  }
+  #modify-patient{
+    width: 100%;
+    padding-right: 15px;
+    padding-left: 15px;
+    padding-top: 100px;
+    padding-bottom: 100px;
+    min-height: 100%;
+    height: auto;
+  }
+  #modify-patient .infoPatientContainer {
+    padding: 0;
+  }
+  #patient-search-patients{
+    width: 100%;
+    padding-left: 5%;
+    padding-right: 5%;
+  }
+  .analytics-patient{
+    gap: 10px;
+    width: 100%;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+  .analytics-patient .info-sup-container {
+    flex-direction: column;
+  }
+  .infoPatientContainer {
+    padding: 15px;
+  }
+  .analytics-patient .info-sup-container {
+    flex-direction: column;
+  }
+  #form-analytics-patient > div label {
+    margin: 0;
+    width:100%;
+    font-weight: bold;
+    color: var(--title-color);
+  }
+  #form-analytics-patient > div {
+    flex-direction: column;
+    justify-content: left;
+    align-items: start;
+  }
+  #form-analytics-patient > div label {
+    margin: 0;
+    width:100%;
+    font-weight: bold;
+    color: var(--title-color);
+    text-align: left;
+  }
+  .container-rinon {
+    gap: 0;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+  }
+  .rinon {
+    width: 75px; /* Ajusta el tamaño según sea necesario */
+    height: 150px; /* Ajusta el tamaño según sea necesario */
+    background-color: #34db3c; /* Color de fondo */
+    border-radius: 75px 0px 0px 75px; /* Bordes superiores redondeados */
+    position: relative; /* Para posicionar el pseudo-elemento */
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    align-self: center;
+    margin-right: 70px;
+  }
+  
+  .rinon > h1 {
+    z-index: 2;
+    font-size: 12px;
+  }
+  
+  .rinon .top-element {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 65px; /* Ajusta el tamaño según sea necesario */
+    height: 65px; /* Ajusta el tamaño según sea necesario */
+    background-color: #34db3c; /* Color de fondo */
+    border-radius: 50%; /* Forma circular */
+    transform: translateX(50%); /* Centra el pseudo-elemento */
+  }
+  
+  .rinon .bottom-element {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 65px; /* Ajusta el tamaño según sea necesario */
+    height: 65px; /* Ajusta el tamaño según sea necesario */
+    background-color: #34db3c; /* Color de fondo */
+    border-radius: 50%; /* Forma circular */
+    transform: translateX(50%); /* Centra el pseudo-elemento */
+  }
+  
+  .rinon .center-element1 {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: 0;
+    width: 20px; /* Ajusta el tamaño según sea necesario */
+    height: 20px; /* Ajusta el tamaño según sea necesario */
+    background-color: #34db3c;
+    z-index: 2;
+    transform: translate(50%,-50%);
+  }
+  .rinon .center-element2 {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: 0;
+    width: 20px; /* Ajusta el tamaño según sea necesario */
+    height: 22.5px; /* Ajusta el tamaño según sea necesario */
+    background-color: #ffffff;
+    z-index: 3;
+    border-radius: 50% 0 0 50%;
+    transform: translate(100%,-50%);
+  }
+  #estadio, #valor {
+    margin-bottom: 0;
+  }
+  #myLineChart {
+    padding: 0px;
+    display: none;
+  }
+  .graphicChart{
+    padding: 10px;
+    display: none;
+  }
 }
 
 /*# sourceMappingURL=style.css.map */

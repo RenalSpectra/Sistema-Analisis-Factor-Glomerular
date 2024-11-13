@@ -1,0 +1,64 @@
+@startuml user_case
+title Caso de Uso: Gestionar Pacientes
+top to bottom direction
+
+rectangle App{
+    actor "Usuario" as U2
+    usecase "Login" as lgin
+    note right of lgin
+      Caso de Uso: Gestion de Usuario
+    end note
+    usecase "Análisis" as anls
+    note top of anls
+      Caso de Uso: Analisis
+    end note
+    package patient{
+      package usuarios{
+        actor "Anonimo" as anm
+        actor "Autentificado" as auth
+      }
+        rectangle "Buscar Paciente" as srch{
+          usecase "Buscar Reporte" as PUC4
+          usecase "Visualizar" as PUC6
+          usecase "Listar" as PUC5
+          note bottom of PUC4
+            Mostrar datos del paciente
+          end note
+          note bottom of PUC5
+            Mostrar Todos los pacientes
+          end note
+        }
+        rectangle "Elimiar Paciente" as dlt{
+          usecase "Eliminar" as PUC3
+          note right of PUC3
+            Confirmación de eliminación
+          end note
+        }
+        rectangle "Modificar Paciente" as mdf{
+          usecase "Modificar" as PUC2
+          note right of PUC2
+            Campos: height, weight
+          end note
+        }
+        rectangle "Crear Paciente" as crt{
+          usecase "Registrar" as PUC1
+          note right of PUC1
+            Datos: ci, name, lastname, birthday, age, gender, height, weight
+          end note
+        }
+    }
+}
+
+U2 --> anm
+U2 --> lgin
+lgin --> auth
+auth --> PUC1
+anm --> PUC4 : CI
+auth --> PUC5
+PUC5 --> PUC6
+PUC4 --> anls
+PUC6 --> PUC4 : CI
+PUC6 --> dlt
+PUC6 --> mdf
+crt --> srch
+@enduml
