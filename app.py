@@ -9,7 +9,6 @@ app = Flask(__name__)
 app.config['JWT_SECRET_KEY'] = SECRET_KEY
 CORS(app, supports_credentials=True)
 
-# Ruta para registrar usuarios (solo admins)
 @app.route('/')
 def init():
     return render_template('index.html')
@@ -26,12 +25,9 @@ def signup():
     data = request.json
     email = data['email']
     password = data['password']
-
     if not email or not password:
         return jsonify({'error': 'Email and password are required'}), 400
-
     try:
-        # Crear el usuario en Supabase
         response = supabase.auth.sign_up({'email': email, 'password': password})
         return jsonify({'message': 'User registered successfully', 'user': response}), 201
     except Exception as e:
@@ -48,11 +44,9 @@ def login():
         if not email or not password:
             return jsonify({'error': 'Email and password are required'}), 400
         try:
-            # Iniciar sesión con el usuario en Supabase (o el sistema que uses)
             supabase.auth.sign_in_with_password({'email': email, 'password': password})
             user = supabase.auth.get_session()
             access_token = user.access_token
-            # Crear la respuesta y agregar la cookie
             return jsonify({
             'message': 'Logged in successfully',
             'access_token': access_token,
@@ -68,17 +62,14 @@ def home_admin():
     else:
         return render_template('403.html')
 
-# Ruta para cerrar sesión (logout)
 @app.route('/logout', methods=['POST'])
 def logout():
     try:
-        # No se necesita una operación explícita en Supabase, simplemente invalidamos el token JWT en el frontend
         supabase.auth.sign_out()
         return jsonify({'message': 'Logged out successfully'}), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 400
 
-# Ruta para crear usuarios (solo para admins)
 @app.route('/create_user', methods=['POST'])
 def register_user():
     log_user = supabase.auth.get_session()
@@ -91,7 +82,6 @@ def register_user():
     else:
         return render_template('403.html')
 
-# CRUD para PATIENT
 @app.route('/patients', methods=['GET', 'POST'])
 def add_patient():
     if supabase.auth.get_session():
@@ -111,20 +101,14 @@ def search_patient():
             return render_template('admin-search-patients.html')
         if request.method == 'POST':
             data = request.json
-            print(f"Data received: {data}")  # Verifica los datos recibidos
-
             if 'patient' not in data:
                 return jsonify({'error': 'No patient provided'}), 400
-
             if data['patient'] == 'all':
-                all_patients = get_all_patient()  # Ahora devuelve directamente los datos
-                print(f"All patients data: {all_patients}")  # Verifica los datos extraídos
-                return jsonify(all_patients), 200  # Devuelve solo los datos
-
+                all_patients = get_all_patient()  
+                return jsonify(all_patients), 200 
             else:
-                patient = get_patient(data['patient'])  # Ahora devuelve directamente los datos
-                print(f"Patient data: {patient}")  # Verifica los datos extraídos
-                return jsonify(patient), 200  # Devuelve solo los datos
+                patient = get_patient(data['patient'])
+                return jsonify(patient), 200 
 
     else:
         return render_template('403.html'), 403
@@ -149,9 +133,7 @@ def modify_patient():
             return render_template('modify-patient.html')
     else:
         return render_template('403.html')
-    
 
-# CRUD para METRICS - solo los usuarios pueden hacer RUD
 @app.route('/api/metrics', methods=['POST'])
 def add_metric():
     data = request.json
@@ -198,12 +180,9 @@ def download_pdf():
         ci = data.get('ci')
         if not ci:
             return {"error": "CI is required"}, 400
-        # Rutas de archivos y otros parámetros
         img_path = os.path.join(app.root_path, 'static', 'icons', 'rinon.png')
         save_path = os.path.join(app.root_path, 'static', 'pdfs')
-        # Generar PDF
         pdf_output_path = create_pdf(ci, img_path, save_path)
-        # Enviar el PDF como respuesta
         response = send_file(pdf_output_path, as_attachment=True, download_name=f"Reporte_Paciente_{data['ci']}.pdf")
         threading.Timer(10, eliminar_pdf, [pdf_output_path]).start()
         return response

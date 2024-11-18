@@ -121,6 +121,13 @@ celerybeat.pid
 # SageMath parsed files
 *.sage.py
 
+#usercases
+/usercases
+.puml
+
+#test
+test.py
+
 # Environments
 .env
 .venv
