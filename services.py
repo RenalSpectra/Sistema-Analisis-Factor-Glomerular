@@ -1,11 +1,9 @@
 from config import supabase, ADMIN, PASSWORD
 from models import calculate_ifg, calculate_ifg_ckd_epi, PDF
 
-# User management
 def create_user(email, password):
     return supabase.auth.sign_up({'email': email, 'password': password})
 
-# CRUD para PATIENT
 def create_patient(data):
     try:
         existing_patient = supabase.table('patient').select('*').eq('ci', data['ci']).execute()
@@ -20,11 +18,11 @@ def create_patient(data):
 
 def get_all_patient():
     response = supabase.table('patient').select('ci, name, lastname').execute()
-    return response.data  # Devolver solo los datos
+    return response.data 
 
 def get_patient(ci):
     response = supabase.table('patient').select('*').eq('ci', ci).execute()
-    return response.data  # Devolver solo los datos
+    return response.data 
 
 def update_patient(ci, data):
     response =  supabase.table('patient').update(data).eq('ci', ci).execute()
@@ -34,7 +32,6 @@ def delete_patient(ci):
     response =  supabase.table('patient').delete().eq('ci', ci).execute()
     return response.data
 
-# CRUD para METRICS
 def create_metric(data):
     patient = supabase.table('patient').select('*').eq('ci', data['ci']).execute()
     if not patient.data:

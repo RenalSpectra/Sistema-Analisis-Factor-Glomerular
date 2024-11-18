@@ -8,9 +8,6 @@ import numpy as np
 import tempfile
 
 def calculate_ifg(creatine, age, gender, stature, weight):
-    # Fórmula para calcular IFG
-    # creatinina 415 - 680
-    # Saludable 565 - 630
     if gender == 'M':
         return (140 - int(age)) * float(weight) / (72 * creatine)
     else:
@@ -45,20 +42,17 @@ class PDF(FPDF):
         self.save_path = save_path
     
     def header (self):
-        # Fondo del encabezado
-        self.set_fill_color(24, 36, 74)  # background-secondary-color39, 60, 123
-        self.rect(0, 0, self.w, 20, 'F')  # Añade un rectángulo para el fondo del encabezado
+        self.set_fill_color(24, 36, 74)
+        self.rect(0, 0, self.w, 20, 'F') 
 
-        # Fecha en el encabezado
         self.set_xy(170, 5)
         self.set_text_color(255, 255, 255)
         self.set_font('Times', '', 12)
         self.cell(0, 10, f"Fecha: {self.current_date}", 0, 1, 'R')
 
-        # Imagen y título
         self.image(self.logo_path, 10, 5, 12)
         self.set_xy(50, 8)
-        self.set_text_color(14, 161, 213)  # title-color
+        self.set_text_color(14, 161, 213)
         self.set_font('Times', 'B', 45)
         y = self.get_y()
         self.set_xy(25, y-2)
@@ -66,24 +60,22 @@ class PDF(FPDF):
         self.ln(8)
 
     def footer (self):
-        # Pie de página
         self.set_y(-15)
         self.set_font('Times', 'I', 8)
-        self.set_text_color(82, 81, 81)  # button-blocked-color
+        self.set_text_color(82, 81, 81)
         self.cell(0, 10, f'Página {self.page_no()}', 0, 0, 'C')
     
     def _patient_section (self):
         self.set_font("Times", "B", 24)
-        self.set_text_color(14, 161, 213)  # title-color
+        self.set_text_color(14, 161, 213)
         self.cell(0, 10, "Reporte", 0, 1, "C")
-        
-        # Datos del Paciente
+
         self.set_font("Times", "B", 16)
-        self.set_text_color(14, 161, 213)  # title-color
+        self.set_text_color(14, 161, 213)
         self.cell(0, 10, "Datos del paciente:", 0, 1)
         
         self.set_font("Times", "", 12)
-        self.set_text_color(43, 43, 43)  # paragraph-color
+        self.set_text_color(43, 43, 43)
         self.cell(0, 10, f"CI: {self.patient['ci']}")
         self.ln(8)
         self.cell(0, 10, f"Nombre: {self.patient['name']} {self.patient['lastname']}")
@@ -102,7 +94,7 @@ class PDF(FPDF):
         self.cell(0, 10, f"Altura actual: {self.patient['height']}")
         self.set_xy(x, y)
         self.ln(10)
-        self.set_draw_color(82, 81, 81)  # button-blocked-color
+        self.set_draw_color(82, 81, 81) 
         self.cell(0, 10, "_" * 100, 0, 1, "C")
     
     def estadio (self, ifg):
@@ -122,15 +114,15 @@ class PDF(FPDF):
     
     def _analytic_section (self):
         self.set_font("Times", "B", 16)
-        self.set_text_color(14, 161, 213)  # title-color
+        self.set_text_color(14, 161, 213)
         self.cell(0, 10, "Analíticas", 0, 1)
         
         self.set_font("Times", "", 12)
-        self.set_text_color(43, 43, 43)  # paragraph-color
+        self.set_text_color(43, 43, 43) 
         self.cell(0, 10, f"Fecha ultimo análisis: {datetime.strptime(self.metric['date'], '%Y-%m-%d').strftime('%d/%m/%Y')}")
         self.ln(8)
         color = self.estadio(self.metric['ifg'])[2]
-        self.set_fill_color(color[0], color[1], color[2])  # background-secondary-color
+        self.set_fill_color(color[0], color[1], color[2]) 
         y = self.get_y()
         self.rect(0, y, 40, 9, 'F')
         self.cell(0, 10, f"Estadio: {self.estadio(self.metric['ifg'])[0]}")
