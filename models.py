@@ -35,7 +35,17 @@ class PDF(FPDF):
         self.current_date = datetime.today().strftime("%d/%m/%Y")
         self.patient = patient
         self.metric = metric
-        self.dates = [datetime.strptime(m['date'], '%Y-%m-%d').strftime('%d/%m/%Y') for m in metrics]
+        self.dates = [] #datetime.strptime(m['date'], '%Y-%m-%d').strftime('%d/%m/%Y') for m in metrics
+        for m in metrics:
+            date_str = m['date']
+            try:
+                date_obj = datetime.strptime(date_str, '%Y/%m/%d')
+            except ValueError:
+                try:
+                    date_obj = datetime.strptime(date_str, '%Y-%m-%d')
+                except ValueError:
+                    continue
+            self.dates.append(date_obj.strftime('%d/%m/%Y'))
         self.ifg_values = [float(m['ifg']) for m in metrics]
         self.weight_values = [float(m['weight']) for m in metrics]
         self.logo_path = img
