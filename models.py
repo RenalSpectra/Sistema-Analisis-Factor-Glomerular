@@ -129,7 +129,20 @@ class PDF(FPDF):
         
         self.set_font("Times", "", 12)
         self.set_text_color(43, 43, 43) 
-        self.cell(0, 10, f"Fecha ultimo análisis: {datetime.strptime(self.metric['date'], '%Y-%m-%d').strftime('%d/%m/%Y')}")
+        try:
+            # Intenta con el formato de guiones
+            date_obj = datetime.strptime(self.metric['date'], '%Y-%m-%d')
+        except ValueError:
+            try:
+                # Si falla, intenta con el formato de barras inclinadas
+                date_obj = datetime.strptime(self.metric['date'], '%Y/%m/%d')
+            except ValueError:
+                # Si no coincide con ningún formato, usa una fecha predeterminada
+                date_obj = datetime.now()
+        formatted_date = date_obj.strftime('%d/%m/%Y')
+        
+        # self.cell(0, 10, f"Fecha ultimo análisis: {datetime.strptime(self.metric['date'], '%Y-%m-%d').strftime('%d/%m/%Y')}")
+        self.cell(0, 10, f"Fecha ultimo análisis: {formatted_date}")
         self.ln(8)
         color = self.estadio(self.metric['ifg'])[2]
         self.set_fill_color(color[0], color[1], color[2]) 
