@@ -58,10 +58,10 @@ def get_metrics(ci, date=None):
     patient = supabase.table('patient').select('*').eq('ci', ci).execute()
     if not patient.data:
         return {"error": "Paciente no encontrado."}, 404
-    query = supabase.table('metrics').select('creatine, ifg, date, weight').eq('ci', ci)
+    query = supabase.table('metrics').select('id, creatine, ifg, date, weight').eq('ci', ci)
     if date:
         query = query.eq('date', date)
-    response = query.order('date', desc=True).execute()
+    response = query.order('id', desc=True).execute()
     metrics = response.data
     if not metrics:
         return {"error": "No metrics found for this patient"}, 404
